@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Life of One Gene | The Bohrer Lab</title>
+<meta name="description" content="A short scroll-through story for undergraduates and prospective students: follow one gene as it switches on, fires a burst of messenger RNA and falls silent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --b1:#F2F3F5; --b3:#E3E7EC; --b4:#FFFFFF; --bp:#F7F8F9; --bcv:#EBEEF1; --bf:#E3E6EA; --menu:#FFFFFF;
+  --red:#A50E1C; --btn:#BB0000; --acc:#B10012;
+  --ink:#15181C; --mut:#4F5762; --line:rgba(20,24,28,.18);
+  --hdr:rgba(255,255,255,.94); --hdrink:#15181C;
+  --f1:#98A2AE; --f2:#7A8594; --f3:#BB0000; --fline:rgba(20,24,28,.10); --falpha:.5;
+  --sans:"Source Sans 3","Source Sans Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --b1:#161A20; --b3:#232A33; --b4:#11151A; --bp:#161A20; --bcv:#1D232B; --bf:#0B0D10; --menu:#161A20;
+    --btn:#C8102E; --acc:#FF6A7D; --ink:#F2F4F7; --mut:#B4BBC6; --line:rgba(255,255,255,.18);
+    --hdr:rgba(14,17,21,.94); --hdrink:#F2F4F7; color-scheme:dark;
+    --f1:#5E6674; --f2:#7A8290; --f3:#E8506A; --fline:rgba(230,232,238,.09);
+  }
+}
+:root[data-theme="dark"]{
+  --b1:#161A20; --b3:#232A33; --b4:#11151A; --bp:#161A20; --bcv:#1D232B; --bf:#0B0D10; --menu:#161A20;
+  --btn:#C8102E; --acc:#FF6A7D; --ink:#F2F4F7; --mut:#B4BBC6; --line:rgba(255,255,255,.18);
+  --hdr:rgba(14,17,21,.94); --hdrink:#F2F4F7; color-scheme:dark;
+  --f1:#5E6674; --f2:#7A8290; --f3:#E8506A; --fline:rgba(230,232,238,.09);
+}
+html{scroll-padding-top:72px;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html,body{height:auto;overflow-x:clip}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--b1);color:var(--ink);font:400 18px/1.65 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+p{margin:0;text-wrap:pretty}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.12;text-wrap:balance}
+a{color:inherit;text-underline-offset:4px;text-decoration-thickness:1px}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:4px}
+.on-red a:focus-visible,.on-red button:focus-visible,#banner a:focus-visible,#banner button:focus-visible,#hdr.alt a:focus-visible,#hdr.alt button:focus-visible{outline-color:#fff}
+img{max-width:100%}
+.ic{width:1em;height:1em;fill:currentColor;flex:none;display:inline-block;vertical-align:-.125em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:3em;padding:0 1.7em;border-radius:3em;border:2px solid var(--line);background:transparent;color:var(--ink);font:600 .82rem/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color .2s,border-color .2s,color .2s,transform .1s}
+.btn:hover{border-color:var(--ink)}
+.btn:active{transform:translateY(1px)}
+.btn.special{background:var(--btn);border-color:var(--btn);color:#fff}
+.btn.special:hover{filter:brightness(1.12);border-color:var(--btn)}
+.on-red .btn{border-color:rgba(255,255,255,.7);color:#fff}
+.on-red .btn:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+.on-red .btn.special{background:#fff;border-color:#fff;color:#8E0B18}
+.on-red .btn.special:hover{background:#F3E6E7;filter:none}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.actions{align-items:center}
+.wrap{padding:clamp(72px,9vw,128px) max(24px,env(safe-area-inset-right,0px)) clamp(72px,9vw,128px) max(24px,env(safe-area-inset-left,0px))}
+.head{text-align:center;max-width:44rem;margin:0 auto clamp(40px,5vw,64px)}
+.head .major{margin-top:.9rem}
+.content h2,.head h2{font-size:clamp(1.9rem,3.3vw,2.85rem)}
+.major{margin-top:.75rem;font-size:1.15rem;font-weight:400;color:var(--mut);line-height:1.4}
+/* ---------- header ---------- */
+#hdr{position:sticky;top:0;z-index:40;height:calc(64px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) max(20px,env(safe-area-inset-right,0px)) 0 max(20px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--hdr);color:var(--hdrink);box-shadow:0 1px 0 var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.logo{font:700 1.2rem/1 var(--sans);letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
+.hnav{display:flex;align-items:center;gap:6px}
+.hnav a{font:400 .95rem/1 var(--sans);text-decoration:none;padding:12px;border-radius:3em;opacity:.9;white-space:nowrap}
+.hnav a:hover{opacity:1;background:rgba(127,127,127,.16)}
+.hnav a.pill{border:2px solid currentColor;padding:11px 18px;margin-left:6px;font-weight:600}
+.hnav a.pill:hover{background:var(--btn);border-color:var(--btn);color:#fff}
+@media (max-width:560px){.hnav a.back{display:none}.hnav a.pill{padding:10px 14px}}
+#start{padding-top:clamp(48px,6vw,88px)}
+.st-foot{text-align:center;padding:40px 24px 56px;font:400 .78rem/1.7 var(--mono);color:var(--mut);background:var(--b3);border-top:1px solid var(--line)}
+.st-foot a{color:var(--mut)}
+.st-foot a:hover{color:var(--acc)}
+@media (max-width:920px){.st-fig{top:calc(68px + env(safe-area-inset-top,0px))}}
+/* ---------- start here: one gene through a bursting cycle ---------- */
+#start{background:var(--b3)}
+.st-eyebrow{font:500 .78rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.9rem}
+.st{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:0 64px}
+.st-fig{position:sticky;top:calc(88px + env(safe-area-inset-top,0px));align-self:start;margin:0;background:#0E1116;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 14px 8px;color:#E9ECF1;box-shadow:0 24px 60px rgba(0,0,0,.18)}
+.st-now{display:flex;gap:14px;align-items:baseline;padding:4px 6px 10px;font:400 .78rem/1.3 var(--mono);color:#98A0AD;font-variant-numeric:tabular-nums}
+.st-now b{font:600 1.02rem/1.2 var(--sans);color:#E9ECF1;letter-spacing:-.005em}
+#st-cv{display:block;width:100%;height:min(540px,60vh);touch-action:pan-y}
+.st-dots{display:flex;gap:4px;justify-content:center;padding:6px 0 0}
+.st-dots button{width:32px;height:32px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer;display:grid;place-items:center}
+.st-dots button::before{content:"";width:8px;height:8px;border-radius:50%;background:#3A4150;transition:background-color .25s,transform .25s}
+.st-dots button:hover::before{background:#98A0AD}
+.st-dots button[aria-current="step"]::before{background:#F0566F;transform:scale(1.4)}
+.st-dots button:focus-visible{outline:2px solid #FF5A74;outline-offset:0}
+.st-steps{list-style:none;margin:0;padding:4vh 0 6vh}
+.st-step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;opacity:.3;transition:opacity .5s ease}
+.st-step.on{opacity:1}
+.st-step .k{font:500 .8rem/1 var(--mono);letter-spacing:.08em;color:var(--acc)}
+.st-step h3{margin-top:.7rem;font-size:clamp(1.6rem,2.6vw,2.2rem)}
+.st-step p{margin-top:1rem;font-size:1.08rem;max-width:32rem}
+.st-step p + p{color:var(--mut)}
+.st-step .actions{margin-top:26px}
+@media (max-width:920px){
+  .st{grid-template-columns:1fr}
+  .st-fig{top:calc(68px + env(safe-area-inset-top,0px));z-index:3;padding:8px 8px 6px;border-radius:12px}
+  #st-cv{height:min(36vh,330px)}
+  .st-now{padding:2px 4px 6px}
+  .st-dots{display:none}
+  .st-steps{padding-top:2vh}
+  .st-step{min-height:62vh;justify-content:flex-start;padding-top:6vh}
+}
+@media (prefers-reduced-motion:reduce){.st-step{opacity:1}}
+
+
+body{background:var(--b3)}
+</style>
+</head>
+<body>
+<header id="hdr">
+  <a class="logo" href="index.html">The Bohrer Lab</a>
+  <nav class="hnav" aria-label="Main"><a class="back" href="index.html">&larr; Lab home</a><a class="back" href="index.html#four">Research</a><a class="pill" href="index.html#join">Join the lab</a></nav>
+</header>
+<main>
+<section id="start" class="wrap" aria-labelledby="st-h">
+  <div class="head"><p class="st-eyebrow">Start here</p><h2 id="st-h">The life of one gene</h2><p class="major">A five-minute story for undergraduates, prospective students and anyone curious. Scroll to follow a single gene as it switches on, fires and falls silent.</p></div>
+  <div class="st">
+    <figure class="st-fig" aria-describedby="st-live">
+      <div class="st-now"><span id="st-n">01 / 06</span><b id="st-t">Meet the gene</b></div>
+      <canvas id="st-cv" role="img" aria-label="Animated sketch of one gene inside a nucleus. A strand of DNA carries a red gene and a blue-violet enhancer. Blue transcription factors wander past; one finds the gene's promoter, a loop brings the enhancer close, RNA polymerases copy the gene and red messenger RNAs drift away. A trace below records when the promoter is on and how many messenger RNAs the cell holds."></canvas>
+      <div class="st-dots" id="st-dots" aria-label="Story steps"></div>
+      <p class="sr" id="st-live" aria-live="polite"></p>
+    </figure>
+    <ol class="st-steps">
+      <li class="st-step" data-t="Meet the gene">
+        <span class="k">01</span>
+        <h3>Meet the gene</h3>
+        <p>Every cell in your body carries about two meters of DNA, folded into a nucleus roughly a tenth the width of a human hair. Our gene is one short stretch of it.</p>
+        <p>Right now it is off. The DNA here is wrapped tightly around spools of protein called nucleosomes, the grey beads, and nothing is reading it.</p>
+      </li>
+      <li class="st-step" data-t="The search">
+        <span class="k">02</span>
+        <h3>The search</h3>
+        <p>To switch the gene on, a protein called a transcription factor has to find it. Factors have no map. They wander through the nucleus, stick to DNA for a moment, let go and try again.</p>
+        <p>Most visits last only seconds, and most are in the wrong place. Watch the highlighted factor try a few spots before it lands on the gene's switch, the promoter.</p>
+      </li>
+      <li class="st-step" data-t="Opening up">
+        <span class="k">03</span>
+        <h3>Opening up</h3>
+        <p>The factor recruits helpers that loosen the packaging, and nucleosomes near the gene are cleared away. Far along the DNA, a control region called an enhancer is brought close by a loop in the fiber.</p>
+        <p>How often enhancers and promoters actually meet, and whether meeting is enough, is one of the questions our lab measures directly in single cells.</p>
+      </li>
+      <li class="st-step" data-t="The burst">
+        <span class="k">04</span>
+        <h3>The burst</h3>
+        <p>Now the gene fires. RNA polymerase enzymes load onto the promoter one after another, each copying the gene into a messenger RNA.</p>
+        <p>This is a burst: many copies in a short window. The count in the trace below climbs quickly.</p>
+      </li>
+      <li class="st-step" data-t="Silence">
+        <span class="k">05</span>
+        <h3>Silence</h3>
+        <p>The factor lets go and the promoter switches off. Polymerases already on the gene finish their copies, then nothing new starts. The gene can stay quiet for minutes or hours.</p>
+        <p>Its messenger RNAs drift away to be made into protein and are slowly broken down, so the count falls.</p>
+      </li>
+      <li class="st-step" data-t="Why it is random">
+        <span class="k">06</span>
+        <h3>Why it is random, and why that matters</h3>
+        <p>Each step depends on a handful of molecules finding each other, so the timing is random. Two identical cells side by side can hold very different numbers of the same messenger RNA.</p>
+        <p>That randomness is not a flaw to ignore. Cells have evolved ways to tune it, and we want to know how: we watch these steps in single cells with super-resolution microscopy and build physical models that explain the timing.</p>
+      </li>
+      <li class="st-step" data-t="When the switch breaks">
+        <span class="k">07</span>
+        <h3>When the switch breaks</h3>
+        <p>Healthy tissue depends on this timing. Genes that tell a cell to grow and divide should fire only when growth is needed, then fall quiet. Many diseases, including most cancers, involve genes switched on at the wrong time or at the wrong level.</p>
+        <p>In Burkitt lymphoma, a cancer of immune cells, a chromosome rearrangement moves the growth gene <i>MYC</i> next to a powerful enhancer that normally drives antibody production. The gene fires far more often than it should, its messenger RNA piles up, and the cells keep dividing. Learning exactly how enhancers set the rhythm of bursting is how we understand what goes wrong.</p>
+        <p>If that sounds like the kind of puzzle you want to work on, come talk to us.</p>
+        <div class="actions"><a class="btn special" href="index.html#join">Join the lab</a><a class="btn" href="index.html#four">See the research</a></div>
+      </li>
+    </ol>
+  </div>
+</section>
+</main>
+<footer class="st-foot"><a href="index.html">The Bohrer Lab</a> &middot; Department of Physics, The Ohio State University</footer>
+<script>
+/* ---------- Start here: one gene through a bursting cycle (scroll-driven sketch) ---------- */
+(function(){
+"use strict";
+const sec=document.getElementById("start");if(!sec)return;
+const cv=document.getElementById("st-cv"),ctx=cv.getContext("2d");
+const fig=sec.querySelector(".st-fig"),steps=[...sec.querySelectorAll(".st-step")];
+const nEl=document.getElementById("st-n"),tEl=document.getElementById("st-t"),live=document.getElementById("st-live"),dotsEl=document.getElementById("st-dots");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const INK="#E9ECF1",MUT="#98A0AD",RULE="#2A313C",SCAR="#F0566F",BLUE="90,176,232",ENH="149,153,232",HOT="255,158,84",POL="#C9CDD6";
+const MONO='"IBM Plex Mono",ui-monospace,Menlo,monospace';
+const P=.52,G=.82,A=.17,AE=.23; // promoter, gene end, enhancer span (fractions along the DNA)
+const TOT=steps.length;
+let W=0,H=0,SH=0,step=0;
+
+/* ---- layout ---- */
+function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);W=Math.max(1,r.width);H=Math.max(1,r.height);cv.width=Math.round(W*d);cv.height=Math.round(H*d);ctx.setTransform(d,0,0,d,0,0);SH=H*(W<560?.64:.76);}
+const lerp=(a,b,t)=>a+(b-a)*t, clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+/* state that eases toward per-step targets */
+const S={loop:0,open:0,t:0,lab:{gene:0,prom:0,enh:0,tf:0,pol:0,mrna:0,hij:0,tis:0,hl:0}};
+const TGT=[
+ {loop:0,open:0,lab:{gene:1,prom:0,enh:0,tf:0,pol:0,mrna:0,hij:0,tis:0,hl:0}},
+ {loop:0,open:0,lab:{gene:1,prom:1,enh:0,tf:1,pol:0,mrna:0,hij:0,tis:0,hl:0}},
+ {loop:1,open:1,lab:{gene:1,prom:1,enh:1,tf:0,pol:0,mrna:0,hij:0,tis:0,hl:0}},
+ {loop:1,open:1,lab:{gene:0,prom:0,enh:0,tf:0,pol:1,mrna:1,hij:0,tis:0,hl:0}},
+ {loop:1,open:.55,lab:{gene:1,prom:0,enh:0,tf:0,pol:0,mrna:1,hij:0,tis:0,hl:0}},
+ {loop:1,open:1,lab:{gene:0,prom:0,enh:0,tf:0,pol:0,mrna:0,hij:0,tis:0,hl:0}},
+ {loop:1,open:1,lab:{gene:1,prom:0,enh:0,tf:0,pol:0,mrna:0,hij:1,tis:1,hl:1}}
+];
+function geo(){
+  const pad=Math.max(18,W*.04),cy=SH*.66,R=Math.min(SH*.3,W*.15),d=.36;
+  const xl=u=>pad+u*(W-2*pad),xp=xl(P);
+  const cx=xp-R*Math.cos(Math.PI/2-d),cyc=cy-R*Math.sin(Math.PI/2-d);
+  const ex=xp-2*R*Math.sin(d);
+  return {pad,cy,R,d,xl,xp,cx,cyc,ex};
+}
+let GE=null;
+function pt(u){
+  const g=GE,L=ease(S.loop);
+  let x0=g.xl(u),y0=g.cy,x1,y1;
+  if(u>=P){x1=x0;y1=g.cy;}
+  else if(u>=A){const f=(u-A)/(P-A),ph=Math.PI/2+g.d+f*(2*Math.PI-2*g.d);x1=g.cx+g.R*Math.cos(ph);y1=g.cyc+g.R*Math.sin(ph);}
+  else{x1=g.pad+(u/A)*(g.ex-g.pad);y1=g.cy;}
+  let x=lerp(x0,x1,L),y=lerp(y0,y1,L);
+  // packing: tight wiggle around the gene when closed, gentle breathing elsewhere
+  const w=Math.exp(-Math.pow((u-.66)/.16,2)),comp=(1-S.open)*w;
+  y+=Math.sin(u*150+S.t*.8)*(1.2+comp*7)+Math.sin(u*23-S.t*.35)*2.2;
+  x+=Math.cos(u*150+S.t*.8)*comp*3;
+  return {x,y};
+}
+const NP=320;let PTS=[];
+function buildPts(){PTS=new Array(NP+1);for(let i=0;i<=NP;i++)PTS[i]=pt(i/NP);}
+const at=u=>{const f=clamp(u,0,1)*NP,i=Math.floor(f),j=Math.min(NP,i+1),k=f-i;return {x:lerp(PTS[i].x,PTS[j].x,k),y:lerp(PTS[i].y,PTS[j].y,k)};};
+
+/* ---- actors ---- */
+const rnd=Math.random;
+function randn(){let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+const TF=[];for(let i=0;i<15;i++)TF.push({x:rnd(),y:rnd(),stuck:0,u:0});
+const hero={x:.3,y:.2,mode:"free",timer:0,tries:0,u:.5,fx:.3,fy:.2,px:0,py:0,flash:0};
+let pols=[],mrnas=[],on=false,spawn=0,tele=0;
+/* a healthy reference cell, simulated in the background for comparison */
+let hOn=0,hN=0;
+function stepHealthy(dt){if(hOn===0&&rnd()<dt*.16)hOn=1;else if(hOn===1&&rnd()<dt*.5)hOn=0;if(hOn&&rnd()<dt*1.9)hN++;let d=0;for(let i=0;i<hN;i++)if(rnd()<dt/9)d++;hN-=d;}
+/* a small patch of tissue: cells divide when the growth gene is stuck on */
+let cells=[],divT=0;
+function resetCells(){cells=[[.3,.5],[.5,.35],[.7,.55],[.45,.7],[.62,.3]].map(c=>({x:c[0],y:c[1],b:9}));}
+resetCells();
+function stepCells(dt){for(const c of cells)c.b+=dt;if(step!==6)return;divT-=dt;if(divT<=0&&cells.length<46){divT=.5+rnd()*.5;const p=cells[Math.floor(rnd()*cells.length)],a=rnd()*6.28;cells.push({x:clamp(p.x+Math.cos(a)*.13,.05,.95),y:clamp(p.y+Math.sin(a)*.22,.08,.92),b:0});}}
+const TRN=300,TR=Array.from({length:TRN},()=>({on:0,n:0,h:0}));let trT=0; // trace: 30 s at 10 Hz
+function inScene(o){o.x=clamp(o.x,.02,.98);o.y=clamp(o.y,.05,.97);}
+function toPx(o){return {x:GE.pad+o.x*(W-2*GE.pad),y:o.y*SH};}
+function fromPx(p,o){o.x=(p.x-GE.pad)/(W-2*GE.pad);o.y=p.y/SH;}
+function nearestU(px,py){let best=1e9,bu=0;for(let i=0;i<=NP;i+=4){const q=PTS[i],d=(q.x-px)**2+(q.y-py)**2;if(d<best){best=d;bu=i/NP;}}return {u:bu,d:Math.sqrt(best)};}
+
+function setHero(mode,t){hero.mode=mode;hero.timer=t||0;}
+function stepHero(dt){
+  hero.flash=Math.max(0,hero.flash-dt*1.6);
+  const wantBound=(step===1&&hero.tries>=3)||step===2||step===3||((step===5||step===6)&&tele===1);
+  if(hero.mode==="bound"){
+    if(!wantBound||step===4){setHero("free",.9);const p=toPx(hero);p.y-=18;fromPx(p,hero);return;}
+    const q=at(P);hero.px=q.x;hero.py=q.y-7;fromPx({x:hero.px,y:hero.py},hero);return;
+  }
+  if(wantBound&&hero.mode!=="go"){setHero("go");}
+  if(step===1&&hero.mode==="free"&&hero.tries<3){hero.timer-=dt;if(hero.timer<=0){let u;do{u=.04+rnd()*.92;}while(Math.abs(u-P)<.12);hero.u=u;setHero("try");}}
+  if(hero.mode==="try"||hero.mode==="go"){
+    const u=hero.mode==="go"?P:hero.u,q=at(u),tx=q.x,ty=q.y-7,p=toPx(hero);
+    const k=1-Math.exp(-dt*(hero.mode==="go"?3.2:4));p.x+=(tx-p.x)*k+randn()*.6;p.y+=(ty-p.y)*k+randn()*.6;fromPx(p,hero);
+    if(Math.hypot(tx-p.x,ty-p.y)<2.5){
+      if(hero.mode==="go"){setHero("bound");hero.flash=1;}
+      else{setHero("sit",.65);hero.flash=1;}
+    }
+    return;
+  }
+  if(hero.mode==="sit"){const q=at(hero.u);fromPx({x:q.x,y:q.y-7},hero);hero.timer-=dt;if(hero.timer<=0){hero.tries++;setHero("free",.55+rnd()*.5);const p=toPx(hero);p.y+=(rnd()<.5?-1:1)*16;fromPx(p,hero);}return;}
+  // free diffusion
+  hero.x+=randn()*.012*Math.sqrt(dt*60);hero.y+=randn()*.02*Math.sqrt(dt*60);inScene(hero);
+}
+function stepTF(dt){
+  const s=Math.sqrt(dt*60);
+  for(const f of TF){
+    if(f.stuck>0){f.stuck-=dt;const q=at(f.u);fromPx({x:q.x+(f.side||0),y:q.y-6},f);if(f.stuck<=0){const p=toPx(f);p.y+=(rnd()<.5?-1:1)*14;fromPx(p,f);}continue;}
+    f.x+=randn()*.011*s;f.y+=randn()*.018*s;inScene(f);
+    if(rnd()<dt*.9){const p=toPx(f),n=nearestU(p.x,p.y);if(n.d<14&&Math.abs(n.u-P)>.05){f.u=n.u;f.stuck=.25+rnd()*.9;f.side=0;}}
+  }
+}
+function stepGene(dt){
+  if(step===5||step===6){ // random switching: healthy = on briefly, off for longer; hijacked = almost always on
+    const kon=step===6?3:.16,koff=step===6?.05:.5;
+    if(tele===0&&rnd()<dt*kon)tele=1;else if(tele===1&&rnd()<dt*koff)tele=0;
+  }
+  on=hero.mode==="bound"&&(step===3||((step===5||step===6)&&tele===1));
+  if(on){spawn-=dt;if(spawn<=0){pols.push({u:P,age:0});spawn=.42+rnd()*.25;}}else spawn=.1;
+  const v=(G-P)/2.4;
+  for(const p of pols){p.u+=v*dt;p.age+=dt;}
+  pols=pols.filter(p=>{if(p.u>=G){const q=at(G);mrnas.push({x:q.x,y:q.y,vx:(rnd()-.3)*50,vy:(rnd()<.5?-1:1)*(22+rnd()*30),age:0,life:-Math.log(1-rnd())*(step===4?5:9)+2,rot:rnd()*6.28});return false;}return true;});
+  for(const m of mrnas){m.age+=dt;m.x+=m.vx*dt+randn()*.9;m.y+=m.vy*dt+randn()*.9;m.vx*=Math.exp(-dt*.45);m.vy*=Math.exp(-dt*.45);m.x=clamp(m.x,8,W-8);m.y=clamp(m.y,10,SH-6);m.rot+=dt*.6;}
+  mrnas=mrnas.filter(m=>m.age<m.life);
+}
+function tick(dt){
+  S.t+=dt;
+  const T=TGT[step],k=1-Math.exp(-dt*1.4),kl=1-Math.exp(-dt*3);
+  S.loop+=(T.loop-S.loop)*k;S.open+=(T.open-S.open)*k;
+  for(const n in S.lab)S.lab[n]+=(T.lab[n]-S.lab[n])*kl;
+  buildPts();stepTF(dt);stepHero(dt);stepGene(dt);stepHealthy(dt);stepCells(dt);
+  trT+=dt;while(trT>=.1){trT-=.1;TR.push({on:on?1:0,n:mrnas.length,h:hN});if(TR.length>TRN)TR.shift();}
+}
+
+/* ---- drawing ---- */
+function strokeRange(u0,u1,style,w,alpha){
+  ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=style;ctx.lineWidth=w;ctx.lineCap="round";ctx.lineJoin="round";
+  ctx.beginPath();const i0=Math.floor(u0*NP),i1=Math.ceil(u1*NP);for(let i=i0;i<=i1;i++){const q=PTS[i];i===i0?ctx.moveTo(q.x,q.y):ctx.lineTo(q.x,q.y);}ctx.stroke();ctx.restore();
+}
+function label(txt,x,y,a,align,col){if(a<.02)return;ctx.save();ctx.globalAlpha=a;ctx.font="11px "+MONO;const tw=ctx.measureText(txt).width;align=align||"center";let l=align==="center"?x-tw/2:align==="right"?x-tw:x;l=clamp(l,6,W-6-tw);x=l;align="left";ctx.textAlign=align;ctx.fillStyle=col||MUT;ctx.fillText(txt,x,y);ctx.restore();}
+function squiggle(x,y,rot,len,a){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=a;ctx.strokeStyle=SCAR;ctx.lineWidth=1.8;ctx.lineCap="round";ctx.beginPath();for(let i=0;i<=10;i++){const s=i/10*len-len/2,yy=Math.sin(i/10*Math.PI*2.4)*2.2;i?ctx.lineTo(s,yy):ctx.moveTo(s,yy);}ctx.stroke();ctx.restore();}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  if(!PTS.length)buildPts();
+  // DNA backbone
+  strokeRange(0,1,INK,1.6,.42);
+  // enhancer and gene
+  const eh=S.lab.hij,ec=`rgb(${[0,1,2].map(j=>Math.round(lerp(+ENH.split(",")[j],+HOT.split(",")[j],eh))).join(",")})`;
+  if(eh>.05){ctx.save();ctx.shadowColor=`rgba(${HOT},${eh})`;ctx.shadowBlur=16*eh;strokeRange(A-.02*eh,AE+.02*eh,ec,3.4+2.4*eh,.9);ctx.restore();}
+  strokeRange(A-.02*eh,AE+.02*eh,ec,3.4+2.4*eh,.35+.6*Math.max(S.lab.enh,eh)+.2*S.loop);
+  const glow=on?1:0;
+  if(on||pols.length){ctx.save();ctx.shadowColor=SCAR;ctx.shadowBlur=14;strokeRange(P,G,SCAR,3.4,.9);ctx.restore();}
+  strokeRange(P,G,SCAR,3.2,.55+.45*glow+(pols.length?.3:0));
+  // promoter mark
+  const pp=at(P);ctx.save();ctx.fillStyle=SCAR;ctx.globalAlpha=.9;ctx.beginPath();ctx.moveTo(pp.x,pp.y+1);ctx.lineTo(pp.x,pp.y-12);ctx.lineTo(pp.x+8,pp.y-9);ctx.lineTo(pp.x,pp.y-6);ctx.fill();ctx.restore();
+  // nucleosomes: evicted from the gene region as it opens
+  for(let i=1;i<64;i++){const u=i/64,q=at(u),inGene=u>P-.05&&u<G+.02,a=inGene?(1-S.open*.9):1;if(a<.05)continue;
+    const r=inGene?4.6+(1-S.open)*1.2:4.2;ctx.globalAlpha=.8*a;ctx.fillStyle="#5E6674";ctx.beginPath();ctx.arc(q.x,q.y+ (i%2?3:-3)*(inGene?(1-S.open):0.4),r,0,7);ctx.fill();}
+  ctx.globalAlpha=1;
+  // polymerases with growing RNA tails
+  for(const p of pols){const q=at(p.u),f=(p.u-P)/(G-P);ctx.strokeStyle=SCAR;ctx.lineWidth=1.6;ctx.globalAlpha=.9;ctx.beginPath();for(let i=0;i<=8;i++){const s=i/8,xx=q.x-4-s*6,yy=q.y-6-s*(4+f*16)+Math.sin(s*9+S.t*3)*1.5;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);}ctx.stroke();
+    ctx.globalAlpha=1;ctx.fillStyle=POL;ctx.beginPath();ctx.arc(q.x,q.y,5.4,0,7);ctx.fill();}
+  // mRNAs
+  for(const m of mrnas){const a=Math.min(1,m.age*3)*Math.min(1,(m.life-m.age)/1.2);squiggle(m.x,m.y,m.rot,13,a);}
+  // transcription factors
+  for(const f of TF){const p=toPx(f);ctx.globalAlpha=f.stuck>0?.95:.6;ctx.fillStyle=`rgb(${BLUE})`;ctx.beginPath();ctx.arc(p.x,p.y,3.1,0,7);ctx.fill();}
+  const hp=toPx(hero),hi=step>=1?1:0;
+  ctx.globalAlpha=1;ctx.fillStyle=`rgb(${BLUE})`;ctx.beginPath();ctx.arc(hp.x,hp.y,3.4+hi*1.8,0,7);ctx.fill();
+  if(hi){ctx.strokeStyle=`rgba(${BLUE},.55)`;ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(hp.x,hp.y,9+Math.sin(S.t*3)*1.2,0,7);ctx.stroke();}
+  if(hero.flash>0){ctx.strokeStyle=`rgba(${BLUE},${hero.flash*.8})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(hp.x,hp.y,10+(1-hero.flash)*16,0,7);ctx.stroke();}
+  // labels
+  const gm=at((P+G)/2),en=at((A+AE)/2);
+  label(step===6||S.lab.hij>.5?"MYC, a growth gene":"gene",gm.x,gm.y+26,S.lab.gene,"center",SCAR);
+  label("promoter",pp.x-4,pp.y+26,S.lab.prom,"right");
+  label("enhancer",en.x-12,en.y-10,S.lab.enh*(1-S.lab.hij),"right",`rgb(${ENH})`);
+  label("misplaced antibody enhancer",en.x-12,en.y-12,S.lab.hij,"right",`rgb(${HOT})`);
+  drawTissue();
+  label("transcription factor",hp.x,hp.y-16,S.lab.tf*(hero.mode==="bound"?.0:1),"center",`rgb(${BLUE})`);
+  if(pols.length){const q=at(pols[pols.length-1].u);label("RNA polymerase",q.x,q.y+24,S.lab.pol);}
+  if(mrnas.length){const m=mrnas[mrnas.length-1];label("mRNA",m.x,m.y-12,S.lab.mrna*.9,"center",SCAR);}
+  label("nucleosomes",GE.pad,GE.cy+30,S.lab.gene*(1-S.loop)*(step===0?1:0),"left");
+  drawTrace();
+}
+function drawTissue(){
+  const a=S.lab.tis;if(a<.02)return;
+  const bw=Math.min(150,W*.36),bh=Math.min(96,SH*.3),bx=W-bw-10,by=8;
+  ctx.save();ctx.globalAlpha=a;
+  ctx.fillStyle="rgba(14,17,22,.92)";ctx.strokeStyle=RULE;ctx.lineWidth=1;ctx.beginPath();ctx.roundRect?ctx.roundRect(bx,by,bw,bh,8):ctx.rect(bx,by,bw,bh);ctx.fill();ctx.stroke();
+  ctx.font="10px "+MONO;ctx.textAlign="left";ctx.fillStyle=MUT;ctx.fillText("tissue",bx+8,by+14);
+  ctx.textAlign="right";ctx.fillStyle=cells.length>8?SCAR:MUT;ctx.fillText(cells.length+" cells",bx+bw-8,by+14);
+  const r=Math.max(3.2,Math.min(bw,bh)*.075);
+  ctx.save();ctx.beginPath();ctx.rect(bx+2,by+20,bw-4,bh-22);ctx.clip();
+  for(const c of cells){const g=Math.min(1,c.b*2.5),x=bx+6+c.x*(bw-12),y=by+22+c.y*(bh-28);
+    ctx.globalAlpha=a*g;ctx.fillStyle=c.b<3?"rgba(240,86,111,.45)":"rgba(152,160,173,.22)";ctx.strokeStyle=c.b<3?SCAR:"#7A8290";ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(x,y,r*(.6+.4*g),0,7);ctx.fill();ctx.stroke();
+    ctx.fillStyle=c.b<3?SCAR:"#98A0AD";ctx.beginPath();ctx.arc(x,y,r*.32,0,7);ctx.fill();}
+  ctx.restore();ctx.restore();
+}
+function drawTrace(){
+  const x0=10,x1=W-10,top=SH+14,bh=8,ly=top+bh+18,lh=H-ly-8;
+  ctx.fillStyle=RULE;ctx.fillRect(x0,SH+2,x1-x0,1);
+  ctx.font="10.5px "+MONO;ctx.textAlign="left";ctx.fillStyle=MUT;ctx.globalAlpha=1;
+  ctx.fillText("promoter on",x0,top-2);ctx.textAlign="right";ctx.fillText("last 30 s",x1,top-2);
+  const n=TR.length,dx=(x1-x0)/TRN,off=x1-n*dx;
+  ctx.fillStyle="#1C222B";ctx.fillRect(x0,top+2,x1-x0,bh);
+  ctx.fillStyle=SCAR;for(let i=0;i<n;i++)if(TR[i].on)ctx.fillRect(off+i*dx,top+2,dx+.5,bh);
+  let mx=8;for(const r of TR)mx=Math.max(mx,r.n,r.h*S.lab.hl);
+  ctx.textAlign="left";ctx.fillStyle=MUT;ctx.fillText("mRNA in this cell",x0,ly+6);
+  const cur=n?TR[n-1].n:0;ctx.textAlign="right";ctx.fillStyle=INK;ctx.fillText(String(cur),x1,ly+6);
+  const gy0=ly+12,gy1=ly+Math.max(20,lh);
+  ctx.strokeStyle=RULE;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,gy1+.5);ctx.lineTo(x1,gy1+.5);ctx.stroke();
+  if(n>1&&S.lab.hl>.02){ctx.save();ctx.globalAlpha=S.lab.hl;ctx.strokeStyle="#7A8290";ctx.lineWidth=1.5;ctx.setLineDash([4,3]);ctx.beginPath();for(let i=0;i<n;i++){const x=off+i*dx,y=gy1-(TR[i].h/mx)*(gy1-gy0);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();ctx.setLineDash([]);
+    ctx.font="10.5px "+MONO;ctx.textAlign="right";ctx.fillStyle=MUT;ctx.fillText("- - healthy cell",x1-34,ly+6);ctx.restore();}
+  if(n>1){ctx.strokeStyle=SCAR;ctx.lineWidth=1.7;ctx.lineJoin="round";ctx.beginPath();for(let i=0;i<n;i++){const x=off+i*dx,y=gy1-(TR[i].n/mx)*(gy1-gy0);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();}
+}
+
+/* ---- step control ---- */
+const names=steps.map(s=>s.dataset.t);
+names.forEach((nm,i)=>{const b=document.createElement("button");b.type="button";b.setAttribute("aria-label",`Step ${i+1}: ${nm}`);b.addEventListener("click",()=>{steps[i].scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});});dotsEl.appendChild(b);});
+const dots=[...dotsEl.children];
+function setStep(i){
+  if(i===step&&steps[i].classList.contains("on"))return;
+  const prev=step;step=i;
+  steps.forEach((s,j)=>s.classList.toggle("on",j===i));
+  dots.forEach((d,j)=>{if(j===i)d.setAttribute("aria-current","step");else d.removeAttribute("aria-current");});
+  nEl.textContent=String(i+1).padStart(2,"0")+" / "+String(TOT).padStart(2,"0");tEl.textContent=names[i];
+  live.textContent=`Step ${i+1} of ${TOT}: ${names[i]}`;
+  if(i===1&&prev!==1){hero.tries=0;if(hero.mode!=="free")setHero("free",.4);else hero.timer=.4;}
+  if(i<1&&hero.mode!=="free")setHero("free",.5);
+  if(i===5||i===6)tele=1;if(i===6&&prev!==6){resetCells();divT=.8;}
+  if(reduce)settle();
+}
+function pick(){
+  const r=fig.getBoundingClientRect(),narrow=innerWidth<=920;
+  const line=narrow?r.bottom+(innerHeight-r.bottom)*.4:innerHeight*.5;
+  let i=0;steps.forEach((s,j)=>{if(s.getBoundingClientRect().top<line)i=j;});
+  setStep(i);
+}
+let pend=false;addEventListener("scroll",()=>{if(!pend){pend=true;requestAnimationFrame(()=>{pend=false;pick();});}},{passive:true});
+addEventListener("resize",pick);
+
+/* ---- loop ---- */
+let running=false,visible=false,last=0;
+function frame(ts){if(!running)return;const dt=Math.min(.05,(ts-(last||ts))/1000);last=ts;tick(dt);draw();requestAnimationFrame(frame);}
+function start(){if(running||reduce)return;running=true;last=0;requestAnimationFrame(frame);}
+function stop(){running=false;}
+function settle(){for(let k=0;k<150;k++)tick(1/30);draw();} // reduced motion: jump to the step's settled picture
+new IntersectionObserver(es=>{visible=es[0].isIntersecting;visible?start():stop();},{rootMargin:"100px"}).observe(cv);
+document.addEventListener("visibilitychange",()=>{document.hidden?stop():(visible&&start());});
+new ResizeObserver(()=>{size();GE=geo();buildPts();if(!running)draw();}).observe(cv);
+size();GE=geo();buildPts();
+for(let k=0;k<30;k++)tick(1/30);
+setStep(0);pick();draw();
+if(reduce)settle();
+})();
+</script>
+</body>
+</html>
