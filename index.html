@@ -168,6 +168,10 @@ img{max-width:100%}
 .head .major{margin-top:.9rem}
 #four{background:var(--b4)}
 .center-actions{display:flex;justify-content:center;margin-top:clamp(40px,5vw,64px)}
+.center-actions.col{flex-direction:column;align-items:center;gap:16px}
+.mailfb{margin:0;font-size:.95rem;line-height:1.5;text-align:center;color:var(--mut)}
+.mailfb .linkbtn{color:inherit;font-weight:600}
+#copymsg{margin-left:.5em;font-family:var(--mono);font-size:.85rem}
 
 #publications{background:var(--bp)}
 .list-in{max-width:62rem;margin:0 auto}
@@ -591,7 +595,8 @@ details.cvs[open] > summary .ct .ic-plus{display:none}
     <li class="rv"><span class="icon"><svg class="ic" aria-hidden="true"><use href="#i-graduation-cap"/></svg></span><h3>Graduate students</h3><p>Physics, biophysics, or related programs. Interest in imaging, modeling, or both.</p></li>
     <li class="rv"><span class="icon"><svg class="ic" aria-hidden="true"><use href="#i-flask"/></svg></span><h3>Undergraduates</h3><p>Research projects in image analysis, simulation, and microscopy. No prior lab experience needed.</p></li>
   </ul>
-  <div class="center-actions"><a class="btn special" href="mailto:bohrer.49@osu.edu?subject=Prospective%20member%2C%20Bohrer%20Lab">Email Christopher</a></div>
+  <div class="center-actions col"><a class="btn special" href="mailto:bohrer.49@osu.edu?subject=Prospective%20member%2C%20Bohrer%20Lab">Email Christopher</a>
+    <p class="mailfb">Mail app not opening? <button class="linkbtn" id="copyem2" type="button">Copy the address</button><span id="copymsg" role="status" aria-live="polite"></span></p></div>
 </section>
 
 </main>
@@ -894,6 +899,12 @@ buildMap();sync();
 document.getElementById("copyem").addEventListener("click",e=>{const b=e.currentTarget,t=document.getElementById("em").textContent.trim();
   const done=()=>{b.lastChild.textContent="Copied";setTimeout(()=>b.lastChild.textContent="Copy",1500);};
   try{navigator.clipboard.writeText(t).then(done,()=>{getSelection().selectAllChildren(document.getElementById("em"));});}catch(_){getSelection().selectAllChildren(document.getElementById("em"));}});
+/* Copy fallback under the "Email Christopher" button */
+document.getElementById("copyem2").addEventListener("click",()=>{
+  const t=document.getElementById("em").textContent.trim(),m=document.getElementById("copymsg");
+  const ok=()=>{m.textContent="Copied "+t;setTimeout(()=>m.textContent="",3000);};
+  const show=()=>{m.textContent=t;};
+  try{navigator.clipboard.writeText(t).then(ok,show);}catch(_){show();}});
 
 /* ---------- Random fact: a new one each visit. Add or remove lines freely. ---------- */
 (function(){
