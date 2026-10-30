@@ -7,7 +7,7 @@
 <meta name="description" content="A short scroll-through story for undergraduates and prospective students: follow one gene as it switches on, fires a burst of messenger RNA and falls silent.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap">
 <style>
 :root{
   --b1:#F2F3F5; --b3:#E3E7EC; --b4:#FFFFFF; --bp:#F7F8F9; --bcv:#EBEEF1; --bf:#E3E6EA; --menu:#FFFFFF;
@@ -16,7 +16,9 @@
   --hdr:rgba(255,255,255,.94); --hdrink:#15181C;
   --f1:#98A2AE; --f2:#7A8594; --f3:#BB0000; --fline:rgba(20,24,28,.10); --falpha:.5;
   --sans:"Source Sans 3","Source Sans Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:"Source Serif 4","Source Serif Pro",Georgia,"Times New Roman",serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --spark:#FF4A62;
   color-scheme:light;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -43,13 +45,16 @@ html,body{height:auto;overflow-x:clip}
 body{margin:0;background:var(--b1);color:var(--ink);font:400 18px/1.65 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 p{margin:0;text-wrap:pretty}
 h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.12;text-wrap:balance}
+h1,h2{font-family:var(--serif);font-weight:600;letter-spacing:-.015em;line-height:1.06;font-optical-sizing:auto}
+h3{font-weight:600;letter-spacing:-.01em}
+::selection{background:var(--btn);color:#fff}
 a{color:inherit;text-underline-offset:4px;text-decoration-thickness:1px}
 a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:4px}
 .on-red a:focus-visible,.on-red button:focus-visible,#banner a:focus-visible,#banner button:focus-visible,#hdr.alt a:focus-visible,#hdr.alt button:focus-visible{outline-color:#fff}
 img{max-width:100%}
 .ic{width:1em;height:1em;fill:currentColor;flex:none;display:inline-block;vertical-align:-.125em}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:3em;padding:0 1.7em;border-radius:3em;border:2px solid var(--line);background:transparent;color:var(--ink);font:600 .82rem/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color .2s,border-color .2s,color .2s,transform .1s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:2.9em;padding:0 1.45em;border-radius:3em;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:600 .95rem/1 var(--sans);letter-spacing:.005em;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background-color .2s,border-color .2s,color .2s,transform .1s}
 .btn:hover{border-color:var(--ink)}
 .btn:active{transform:translateY(1px)}
 .btn.special{background:var(--btn);border-color:var(--btn);color:#fff}
@@ -63,15 +68,19 @@ img{max-width:100%}
 .wrap{padding:clamp(72px,9vw,128px) max(24px,env(safe-area-inset-right,0px)) clamp(72px,9vw,128px) max(24px,env(safe-area-inset-left,0px))}
 .head{text-align:center;max-width:44rem;margin:0 auto clamp(40px,5vw,64px)}
 .head .major{margin-top:.9rem}
-.content h2,.head h2{font-size:clamp(1.9rem,3.3vw,2.85rem)}
+.content h2,.head h2{font-size:clamp(2.1rem,3.8vw,3.2rem)}
 .major{margin-top:.75rem;font-size:1.15rem;font-weight:400;color:var(--mut);line-height:1.4}
 /* ---------- header ---------- */
 #hdr{position:sticky;top:0;z-index:40;height:calc(64px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) max(20px,env(safe-area-inset-right,0px)) 0 max(20px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--hdr);color:var(--hdrink);box-shadow:0 1px 0 var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-.logo{font:700 1.2rem/1 var(--sans);letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
+.logo{display:inline-flex;align-items:center;gap:11px;text-decoration:none;white-space:nowrap}
+.logo .mark{width:30px;height:30px;flex:none}
+.logo .ln{display:block;font:600 1.24rem/1 var(--serif);letter-spacing:-.01em}
+.logo .ls{display:block;margin-top:5px;font:500 .6rem/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;opacity:.7}
+@media (max-width:400px){.logo .ls{display:none}}
 .hnav{display:flex;align-items:center;gap:6px}
 .hnav a{font:400 .95rem/1 var(--sans);text-decoration:none;padding:12px;border-radius:3em;opacity:.9;white-space:nowrap}
 .hnav a:hover{opacity:1;background:rgba(127,127,127,.16)}
-.hnav a.pill{border:2px solid currentColor;padding:11px 18px;margin-left:6px;font-weight:600}
+.hnav a.pill{border:1.5px solid currentColor;padding:11px 18px;margin-left:6px;font-weight:600}
 .hnav a.pill:hover{background:var(--btn);border-color:var(--btn);color:#fff}
 @media (max-width:560px){.hnav a.back{display:none}.hnav a.pill{padding:10px 14px}}
 #start{padding-top:clamp(48px,6vw,88px)}
@@ -118,7 +127,7 @@ body{background:var(--b3)}
 </head>
 <body>
 <header id="hdr">
-  <a class="logo" href="index.html">The Bohrer Lab</a>
+  <a class="logo" href="index.html"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.6 19.4c2-5 5.4-1.2 7.2-4.6s-1.6-6 2.1-7 5.4 4 3.1 6.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".55"/><circle cx="17.8" cy="21.4" r="3.1" style="fill:var(--spark)"/></svg><span><span class="ln">The Bohrer Lab</span><span class="ls">Physics &middot; Ohio State</span></span></a>
   <nav class="hnav" aria-label="Main"><a class="back" href="index.html">&larr; Lab home</a><a class="back" href="index.html#four">Research</a><a class="pill" href="index.html#join">Join the lab</a></nav>
 </header>
 <main>
