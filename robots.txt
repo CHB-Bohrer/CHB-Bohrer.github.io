@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chb-bohrer.github.io/sitemap.xml
