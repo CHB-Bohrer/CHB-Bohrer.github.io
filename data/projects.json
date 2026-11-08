@@ -1,0 +1,46 @@
+{
+  "note": "Which projects the Projects page shows, and in what order. Each project's details live in its own status.json, in its own repo. Set listed to false to hide one.",
+  "groups": [
+    { "id": "research", "title": "Research software", "blurb": "Tools for simulating chromatin and for checking how well live-cell analysis recovers the truth." },
+    { "id": "side", "title": "Side projects", "blurb": "Built for fun, in the same spirit of learning by making." }
+  ],
+  "projects": [
+    {
+      "slug": "chromatin-studio",
+      "repo": "CHB-Bohrer/chromatin-studio",
+      "group": "research",
+      "page": "/chromatin-studio/",
+      "title": "Chromatin Studio",
+      "tagline": "A visual builder and simulator for chromatin, reacting proteins, histone marks, cohesin and transcription.",
+      "stage": "Research prototype"
+    },
+    {
+      "slug": "sim-live-cell-analysis",
+      "repo": "CHB-Bohrer/Sim_Live_Cell_Analysis",
+      "group": "research",
+      "page": "/Sim_Live_Cell_Analysis/",
+      "title": "Sim Live Cell Analysis",
+      "tagline": "Validate live-cell chromatin-locus analysis against simulated movies with known ground truth.",
+      "stage": "Working prototype"
+    },
+    {
+      "slug": "marchland",
+      "repo": "CHB-Bohrer/marchland",
+      "group": "side",
+      "page": "/marchland/about/",
+      "title": "Marchland",
+      "tagline": "A conquest game powered by your daily steps, played on one shared map.",
+      "stage": "Live, with players"
+    },
+    {
+      "slug": "universal-activation-of-expression",
+      "repo": "CHB-Bohrer/Universal-activation-of-expression",
+      "group": "research",
+      "page": "/Universal-activation-of-expression/",
+      "listed": false,
+      "title": "Universal activation of expression",
+      "tagline": "Repository created, nothing posted yet.",
+      "stage": "Placeholder"
+    }
+  ]
+}
