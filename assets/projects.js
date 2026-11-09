@@ -1,4 +1,4 @@
-/* Projects hub and the home-page teaser.
+/* The Fun Code hub (projects.html).
    data/projects.json says WHICH projects to show and in what order. Each project's own status.json
    (kept in its repo, so it can be updated alongside the code) says WHERE IT STANDS. The hub reads
    those live; if a project's page is not published yet it falls back to a plain card that links to GitHub. */
@@ -90,14 +90,5 @@
     });
   }
 
-  /* home page: the first few projects, same cards */
-  function mountTeaser(root, max) {
-    load().then(function (d) {
-      var items = d.items.slice(0, max || 3);
-      if (!items.length) { root.closest("section").hidden = true; return; }
-      root.replaceChildren(h("div", { class: "pj-grid" }, items.map(card)));
-    }).catch(function () { root.closest("section").hidden = true; });
-  }
-
-  window.Projects = { mountHub: mountHub, mountTeaser: mountTeaser };
+  window.Projects = { mountHub: mountHub };
 })();

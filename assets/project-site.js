@@ -97,7 +97,7 @@
     links.forEach(function (a, i) { if (i) a.classList.remove("special"); });
 
     var hero = h("div", null,
-      h("p", { class: "pg-eyebrow" }, h("a", { href: "/projects.html", style: "text-decoration:none" }, "← All projects")),
+      h("p", { class: "pg-eyebrow" }, h("a", { href: "/projects.html", style: "text-decoration:none" }, "← Fun Code")),
       h("div", { class: "pj-hero-meta" },
         s.stage ? h("span", { class: "pj-stage", text: s.stage }) : null,
         s.kind ? h("span", { class: "pj-stage", text: s.kind }) : null,
@@ -149,6 +149,6 @@
 
   BL.getJSON(statusUrl.href).then(render).catch(function () {
     root.replaceChildren(h("div", { class: "pg-noscript" }, "This page could not load its status just now. ",
-      h("a", { href: "/projects.html", text: "See all projects" }), "."));
+      h("a", { href: "/projects.html", text: "See all fun code" }), "."));
   });
 })();

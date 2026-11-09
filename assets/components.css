@@ -30,6 +30,7 @@
 
 /* ---------- hub: filters + cards ---------- */
 .pj-filters{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 34px}
+.pj-body{margin-top:34px}
 .pj-chip{font:600 .88rem/1 var(--sans);padding:10px 16px;border-radius:2em;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
 .pj-chip:hover{border-color:var(--ink)}
 .pj-chip[aria-pressed="true"]{background:var(--ink);color:var(--b1);border-color:var(--ink)}
@@ -51,7 +52,6 @@
 .pj-tags{display:flex;flex-wrap:wrap;gap:6px}
 .pj-tags span{font:400 .72rem/1 var(--mono);color:var(--mut);padding:5px 8px;border-radius:6px;background:rgba(127,127,127,.14)}
 .pj-empty{color:var(--mut);padding:24px 0}
-.pj-more{margin-top:28px}
 
 /* ---------- project page: hero extras ---------- */
 .pj-hero-meta{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;margin-bottom:1.1rem}

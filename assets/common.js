@@ -1,4 +1,4 @@
-/* Small helpers shared by the Projects hub, the per-project status pages and the Learned page.
+/* Small helpers shared by the Fun Code hub, the per-project status pages and the Learned page.
    No framework, no build step. Everything user-visible is built with textContent (never innerHTML),
    so text in status.json or learned.md cannot inject markup. */
 (function () {

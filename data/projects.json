@@ -1,5 +1,5 @@
 {
-  "note": "Which projects the Projects page shows, and in what order. Each project's details live in its own status.json, in its own repo. Set listed to false to hide one.",
+  "note": "Which projects the Fun Code page shows, and in what order. Each project's details live in its own status.json, in its own repo. Set listed to false to hide one.",
   "groups": [
     { "id": "research", "title": "Research software", "blurb": "Tools for simulating chromatin and for checking how well live-cell analysis recovers the truth." },
     { "id": "side", "title": "Side projects", "blurb": "Built for fun, in the same spirit of learning by making." }
@@ -28,6 +28,7 @@
       "repo": "CHB-Bohrer/marchland",
       "group": "side",
       "page": "/marchland/about/",
+      "listed": false,
       "title": "Marchland",
       "tagline": "A conquest game powered by your daily steps, played on one shared map.",
       "stage": "Live, with players"
