@@ -48,6 +48,8 @@
 .pj-card .pj-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font:400 .76rem/1.4 var(--mono);color:var(--mut);margin-top:auto}
 .pj-card .pj-links{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.92rem;font-weight:600}
 .pj-card .pj-links a{text-decoration:none;color:var(--acc)}
+.pj-card .pj-links a.pj-go{padding:8px 15px;border:1.5px solid var(--acc);border-radius:2em;transition:background-color .15s,color .15s}
+.pj-card .pj-links a.pj-go:hover,.pj-card .pj-links a.pj-go:focus-visible{background:var(--acc);color:#fff}
 .pj-card .pj-links a:hover{text-decoration:underline}
 .pj-tags{display:flex;flex-wrap:wrap;gap:6px}
 .pj-tags span{font:400 .72rem/1 var(--mono);color:var(--mut);padding:5px 8px;border-radius:6px;background:rgba(127,127,127,.14)}

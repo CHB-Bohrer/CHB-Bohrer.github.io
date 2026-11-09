@@ -32,9 +32,15 @@
     var href = r.live ? r.base : ghUrl(e.repo);
     var tags = (s.tags || e.tags || []).slice(0, 4);
 
+    /* The first thing a visitor should get is the way in that explains the project: its guided tour / tutorial
+       (the link marked primary in status.json), else its live demo. Code comes last. Needs the project's page to be published. */
     var links = [];
-    if (r.live) links.push(h("a", { href: r.base, text: "Where it stands" }));
-    if (r.live && s.live && s.live.href) links.push(h("a", { href: BL.safeUrl(s.live.href, location.origin + r.base), text: s.live.label || "Try it" }));
+    if (r.live) {
+      var way = (s.links || []).filter(function (l) { return l.primary; })[0] || (s.live && s.live.href ? s.live : null);
+      var wayHref = way && BL.safeUrl(way.href, location.origin + r.base);
+      if (wayHref) links.push(h("a", { class: "pj-go", href: wayHref, text: "\u25B6 " + (way.label || "Take the tour") }));
+      links.push(h("a", { href: r.base, text: "Where it stands" }));
+    }
     links.push(h("a", { href: ghUrl(e.repo), target: "_blank", rel: "noopener", text: "Code on GitHub" }));
 
     var pushed = h("span", { class: "pj-pushed" });
