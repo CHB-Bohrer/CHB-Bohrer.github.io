@@ -1,7 +1,8 @@
 /* The Fun Code hub (projects.html).
    data/projects.json says WHICH projects to show and in what order. Each project's own status.json
    (kept in its repo, so it can be updated alongside the code) says WHERE IT STANDS. The hub reads
-   those live; if a project's page is not published yet it falls back to a plain card that links to GitHub. */
+   those live. If the project's own page is not published yet (GitHub Pages not turned on for that repo), the card still
+   shows its status, read straight from the repo's status.json on GitHub, and links to the code instead. */
 (function () {
   "use strict";
   var BL = window.BL;
@@ -11,9 +12,16 @@
 
   function resolve(entry) {
     var base = entry.page.replace(/\/?$/, "/");
+    var sub = base.replace(/^\/[^/]+\//, "");   // "/marchland/about/" -> "about/": where status.json sits inside the repo
+    var raw = "https://raw.githubusercontent.com/" + entry.repo + "/main/" + sub + "status.json";
     return BL.getJSON(base + "status.json")
-      .then(function (s) { return { entry: entry, status: s, base: base }; })
-      .catch(function () { return { entry: entry, status: null, base: base }; });
+      .then(function (s) { return { entry: entry, status: s, base: base, live: true }; })
+      .catch(function () {
+        /* page not published: the repo's own status.json still tells us where the project stands */
+        return fetch(raw).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function (s) { return { entry: entry, status: s, base: base, live: false }; });
+      })
+      .catch(function () { return { entry: entry, status: null, base: base, live: false }; });
   }
 
   function card(r) {
@@ -21,12 +29,12 @@
     var title = s.title || e.title, tagline = s.tagline || e.tagline;
     var nodes = BL.allNodes(s.board);
     var labels = s.board && s.board.state_labels;
-    var href = r.status ? r.base : ghUrl(e.repo);
+    var href = r.live ? r.base : ghUrl(e.repo);
     var tags = (s.tags || e.tags || []).slice(0, 4);
 
     var links = [];
-    if (r.status) links.push(h("a", { href: r.base, text: "Where it stands" }));
-    if (s.live && s.live.href) links.push(h("a", { href: BL.safeUrl(s.live.href, location.origin + r.base), text: s.live.label || "Try it" }));
+    if (r.live) links.push(h("a", { href: r.base, text: "Where it stands" }));
+    if (r.live && s.live && s.live.href) links.push(h("a", { href: BL.safeUrl(s.live.href, location.origin + r.base), text: s.live.label || "Try it" }));
     links.push(h("a", { href: ghUrl(e.repo), target: "_blank", rel: "noopener", text: "Code on GitHub" }));
 
     var pushed = h("span", { class: "pj-pushed" });
