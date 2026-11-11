@@ -485,7 +485,7 @@ details.cvs[open] > summary .ct .ic-plus{display:none}
 <div id="scrim"></div>
 
 <section id="banner" aria-labelledby="ban-h">
-  <canvas id="nuc" role="img" aria-label="Animation of a cell nucleus. Transcription factors diffuse and briefly bind genes on seven chromosomes; bound genes switch on at random and release RNA, which leaves the nucleus through nuclear pores. Clicking releases a burst of extra factors."></canvas>
+  <canvas id="nuc" role="img" aria-label="Animation of a cell nucleus. Transcription factors diffuse and briefly bind genes on seven chromosomes; bound genes switch on at random and release RNA, which leaves the nucleus through nuclear pores into a cytoplasm filled with mitochondria, endoplasmic reticulum, Golgi, lysosomes and ribosomes, where kinesin and dynein motors carry cargo along microtubules. Clicking releases a burst of extra factors."></canvas>
   <span id="nuc-read" class="sr" aria-live="polite"></span>
   <div class="b-in">
     <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Department of Physics &middot; The Ohio State University</p>
@@ -1058,7 +1058,7 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const btn=document.getElementById("nuc-pause"),read=document.getElementById("nuc-read");
 const g=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
 // unit coordinates: the nucleus is the unit disk, the cell membrane sits at radius CELL
-const EXTRA=64,NCHR=7,PER=9,TAU=1.6,SIG=.026,EMIT=3,MAXRNA=700,NTF=46,CELL=1.22,NP=34;
+const EXTRA=64,NCHR=7,PER=9,TAU=1.6,SIG=.026,EMIT=3,MAXRNA=700,NTF=46,CELL=1.28,NP=34;
 const KBASE=.006,KBOUND=.6,CAP=.05,DTF=.34,DRNA=.16,INLIFE=9,OUTLIFE=6,WIN=60,ROWS=12;
 const ripples=[];
 let genes,chains,rna,tfs,pores,nucleoli,rows,running=!reduce,onscreen=true,last=null,hover=-1,T=0,W=0,H=0,cx=0,cy=0,rx=0,ry=0;
@@ -1079,6 +1079,7 @@ function build(){
   for(let i=0;i<EXTRA;i++)tfs.push({x:0,y:0,g:-1,dead:true,extra:true,vx:0,vy:0,boost:false,life:0}); // spare factors, released by a click
   const order=genes.map((q,i)=>i).sort((a,b)=>genes[b].aff-genes[a].aff);
   rows=[...Array(ROWS)].map((_,k)=>order[Math.round(k*(order.length-1)/(ROWS-1))]);
+  initCell();
   T=0;for(let i=0;i<1300;i++)step(.05); // run a minute of history so the view opens mid-story
 }
 function track(arr,on){const L=arr[arr.length-1];if(on){if(L&&L[1]===null)return;arr.push([T,null]);}else if(L&&L[1]===null)L[1]=T;}
@@ -1110,17 +1111,139 @@ function step(dt){
   rna.forEach(p=>{p.x+=g()*sr;p.y+=g()*sr;p.age+=dt;let rr=Math.hypot(p.x,p.y);
     if(!p.out){if(rr>.97){const th=Math.atan2(p.y,p.x);let near=pores.some(pa=>Math.abs(Math.atan2(Math.sin(th-pa),Math.cos(th-pa)))<.07);
         if(near){p.out=true;p.age=0;p.x*=1.03/rr;p.y*=1.03/rr;}else{p.x*=.97/rr;p.y*=.97/rr;}}}
-    else{p.x+=p.x/rr*.02*dt;p.y+=p.y/rr*.02*dt;rr=Math.hypot(p.x,p.y);if(rr<1.02){p.x*=1.02/rr;p.y*=1.02/rr;}if(rr>CELL-.02){p.x*=(CELL-.02)/rr;p.y*=(CELL-.02)/rr;}}});
+    else{p.x+=p.x/rr*.04*dt;p.y+=p.y/rr*.04*dt;rr=Math.hypot(p.x,p.y);if(rr<1.02){p.x*=1.02/rr;p.y*=1.02/rr;}if(rr>CELL-.02){p.x*=(CELL-.02)/rr;p.y*=(CELL-.02)/rr;}}});
   rna=rna.filter(p=>p.out?p.age<OUTLIFE:p.age<INLIFE);if(rna.length>MAXRNA)rna.splice(0,rna.length-MAXRNA);
+  if(cell)stepCell(dt);
+}
+/* ---------- cytoplasm: organelles, cytoskeleton and motor proteins ----------
+   Positions use "annular" coordinates: th is the angle around the nucleus and s runs from the nuclear envelope (0) to the cell edge (1),
+   so the whole layout stretches with the window. Microtubules radiate from a centrosome; kinesin walks cargo out, dynein walks it back. */
+const NMT=36,NMITO=14,NLYSO=9,NPEROX=8,NVES=26,NLD=4,NRIBO=150,NCARGO=20,NACT=130,NTUB=30,TH0=-2.45;
+let KX=2.1,KY=1.4,ct=0,sc=1,cell=null;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),rnd=(a,b)=>a+Math.random()*(b-a);
+const A=(th,s)=>{const c=Math.cos(th),n=Math.sin(th);return [1.07*c*(1-s)+.94*KX*c*s,1.07*n*(1-s)+.94*KY*n*s];};
+function conf(o,m){const r=Math.hypot(o.x,o.y)||1,lo=1.09+m;if(r<lo){o.x*=lo/r;o.y*=lo/r;}
+  const q=Math.hypot(o.x/(.95*KX-m),o.y/(.95*KY-m));if(q>1){o.x/=q;o.y/=q;}}
+function pickTh(){const R2=t=>(.94*KX*Math.cos(t))**2+(.94*KY*Math.sin(t))**2-1.14,mx=Math.max(KX,KY)**2*.88-1.14;
+  for(let k=0;k<60;k++){const t=Math.random()*6.2832;if(Math.random()*mx<R2(t))return t;}return Math.random()*6.2832;}
+function spot(){for(let k=0;k<80;k++){const px=rnd(-KX,KX),py=rnd(-KY,KY);if(Math.hypot(px,py)>1.18&&Math.hypot(px/(.92*KX),py/(.92*KY))<1)return {x:px,y:py};}return {x:1.4,y:0};}
+function initCell(){
+  const mts=[...Array(NMT)].map((_,i)=>({dth:(i/(NMT-1)-.5)*4.8+g()*.1,w:g()*.05,ph:Math.random()*6.3,s1:rnd(.9,.985),pts:[],cum:[],len:1}));
+  const er=[0,1,2,3].map(i=>{let a=Math.random()*6.3,tot=0;const arcs=[];while(tot<6){const len=rnd(.5,1.5),gap=rnd(.15,.5);arcs.push([a,a+len]);a+=len+gap;tot+=len+gap;}return {r:1.055+.036*i,arcs,ph:Math.random()*6.3,rough:i<3};});
+  const tub=[...Array(NTUB)].map((_,i)=>{const att=i<14;let th=att?Math.random()*6.3:pickTh(),s=att?.07:rnd(.3,.85);const pts=[[th,s]];
+    for(let k=0;k<(att?5:4);k++){th+=g()*.16;s=clamp(s+(att?rnd(.04,.12):g()*.08),.05,.92);pts.push([th,s]);}return {pts,ph:Math.random()*6.3};});
+  const mito=[...Array(NMITO)].map(()=>({th:pickTh(),s:rnd(.2,.85),a:Math.random()*3.14,L:rnd(.14,.26),w:rnd(.04,.058),ph:Math.random()*6.3}));
+  const actin=[...Array(NACT)].map(()=>({th:Math.random()*6.3,s:rnd(.9,1),a:rnd(-.7,.7),l:rnd(.04,.08),ph:Math.random()*6.3}));
+  const ribo=[...Array(NRIBO)].map(()=>spot()),blobs=[];
+  const add=(t,n,r0,r1)=>{for(let i=0;i<n;i++){const p=spot();p.t=t;p.r=rnd(r0,r1);p.d=[...Array(3)].map(()=>[Math.random()*6.3,Math.random()*.55]);blobs.push(p);}};
+  add("d",NLD,7,10);add("l",NLYSO,5,7);add("p",NPEROX,3.4,4.6);add("v",NVES,2.4,3.6);
+  cell={mts,er,tub,mito,actin,ribo,blobs,cargo:[],pings:[]};
+  layoutCell();
+  for(let i=0;i<NCARGO;i++)cell.cargo.push(spawnCargo({},true));
+}
+// microtubules: leave the centrosome radially, then curve round toward their own spot on the cell edge
+function layoutCell(){
+  cell.mts.forEach(m=>{const N=26;m.pts=[];m.cum=[0];
+    for(let j=0;j<N;j++){const t=j/(N-1),th=TH0+m.dth*Math.pow(t,1.5)+m.w*Math.sin(t*5+m.ph)*t,s=.03+(m.s1-.03)*Math.pow(t,.8);
+      m.pts.push(A(th,s));if(j)m.cum.push(m.cum[j-1]+Math.hypot(m.pts[j][0]-m.pts[j-1][0],m.pts[j][1]-m.pts[j-1][1]));}
+    m.len=m.cum[N-1];});
+  cell.ribo.forEach(o=>conf(o,.01));cell.blobs.forEach(o=>conf(o,.03));
+}
+function mtAt(m,d){const cum=m.cum,pts=m.pts;let i=1;while(i<cum.length-1&&cum[i]<d)i++;
+  const a=pts[i-1],b=pts[i],seg=(cum[i]-cum[i-1])||1e-6,t=clamp((d-cum[i-1])/seg,0,1);
+  return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,(b[0]-a[0])/seg,(b[1]-a[1])/seg];}
+function spawnCargo(c,init){const out=Math.random()<.55;c.m=Math.floor(Math.random()*cell.mts.length);const L=cell.mts[c.m].len;
+  c.dir=out?1:-1;c.d=init?rnd(.03,.97)*L:(out?.02:.98)*L;c.v=rnd(.06,.13)*(out?1:.85);c.r=rnd(2.6,4.4);c.pause=0;c.al=init?1:0;c.end=false;c.sgn=Math.random()<.5?1:-1;return c;}
+function stepCargo(c,dt){const m=cell.mts[c.m];
+  if(c.end){c.al-=dt*2.5;if(c.al<=0)spawnCargo(c,false);return;}
+  if(c.al<1)c.al=Math.min(1,c.al+dt*2);
+  if(c.pause>0){c.pause-=dt;return;}
+  if(Math.random()<.12*dt){c.pause=rnd(.4,1.8);return;}
+  c.d+=c.dir*c.v*dt*Math.max(0,1+.25*g());
+  if(c.d>=m.len){c.d=m.len;c.end=true;const p=mtAt(m,m.len);cell.pings.push({x:p[0],y:p[1],age:0});}else if(c.d<=0){c.d=0;c.end=true;}}
+function stepCell(dt){
+  ct+=dt;const sd=Math.sqrt(dt);
+  cell.mito.forEach(m=>{m.th+=g()*.01*sd;m.s=clamp(m.s+g()*.008*sd,.18,.88);m.a+=g()*.05*sd;});
+  cell.ribo.forEach(o=>{o.x+=g()*.035*sd;o.y+=g()*.035*sd;conf(o,.01);});
+  cell.blobs.forEach(o=>{o.x+=g()*.03*sd;o.y+=g()*.03*sd;conf(o,.03);});
+  cell.cargo.forEach(c=>stepCargo(c,dt));
+  for(let i=cell.pings.length-1;i>=0;i--){cell.pings[i].age+=dt;if(cell.pings[i].age>1)cell.pings.splice(i,1);}
+}
+function drawMito(m,t){
+  const [ux,uy]=A(m.th,m.s),[px,py]=P(ux,uy),L=m.L*rx,w=m.w*rx,hl=L/2,hw=w/2,bd=Math.sin(t*.35+m.ph)*.25*w;
+  x.save();x.translate(px,py);x.rotate(m.a);
+  x.beginPath();x.moveTo(-hl+hw,-hw);x.quadraticCurveTo(0,-hw+bd,hl-hw,-hw);x.arc(hl-hw,0,hw,-Math.PI/2,Math.PI/2);x.quadraticCurveTo(0,hw+bd,-hl+hw,hw);x.arc(-hl+hw,0,hw,Math.PI/2,Math.PI*1.5);x.closePath();
+  x.fillStyle="rgba(255,170,90,.05)";x.fill();x.strokeStyle="rgba(255,175,95,.26)";x.lineWidth=1.1;x.stroke();
+  const n=Math.max(3,Math.floor(L/11));x.beginPath();
+  for(let k=1;k<=n;k++){const xk=-hl+hw+(L-w)*k/(n+1),up=k%2?-1:1,y0=up*hw*.92+bd*.4*(1-(xk/hl)**2);x.moveTo(xk,y0);x.lineTo(xk+up*.12*w,y0-up*w*.62);}
+  x.strokeStyle="rgba(255,185,110,.17)";x.lineWidth=.9;x.stroke();x.restore();
+}
+function drawCargo(c){
+  const m=cell.mts[c.m],Ls=7*sc/rx,u=c.dir*c.d/Ls,n=Math.floor(u),f=u-n,sw=f*f*(3-2*f),col=c.dir>0?"150,235,205":"255,205,120",al=Math.max(0,c.al);
+  const [bx,by,tx,ty]=mtAt(m,c.d),nx=-ty*c.sgn,ny=tx*c.sgn,off=(c.r+6)*sc/rx,[Cx,Cy]=P(bx+nx*off,by+ny*off),r=c.r*sc;
+  x.lineWidth=1.2*sc;x.strokeStyle=`rgba(${col},${.8*al})`;x.fillStyle=`rgba(${col},${.9*al})`;
+  // hand-over-hand stepping: one head stays put while the other swings past it
+  [n+.5,n-.5+2*sw].forEach((k,i)=>{const [fx,fy]=mtAt(m,clamp(c.dir*k*Ls,0,m.len)),lift=i?Math.sin(Math.PI*sw)*3*sc/rx:0,[Fx,Fy]=P(fx+nx*lift,fy+ny*lift);
+    x.beginPath();x.moveTo(Cx,Cy);x.lineTo(Fx,Fy);x.stroke();x.beginPath();x.arc(Fx,Fy,1.5*sc,0,7);x.fill();});
+  x.fillStyle=`rgba(${col},${.22*al})`;x.strokeStyle=`rgba(${col},${.95*al})`;x.beginPath();x.arc(Cx,Cy,r,0,7);x.fill();x.stroke();
+}
+function drawCell(){
+  const t=ct;
+  // cell membrane, with a slow ruffle
+  x.beginPath();for(let i=0;i<160;i++){const th=i/160*6.2832,w=1+.0035*Math.sin(5*th+t*.35)+.0025*Math.sin(9*th-t*.5)+.002*Math.sin(17*th+t*.8),
+    px=cx+KX*rx*w*Math.cos(th),py=cy+KY*ry*w*Math.sin(th);i?x.lineTo(px,py):x.moveTo(px,py);}x.closePath();
+  x.fillStyle="rgba(22,28,38,.55)";x.fill();x.lineJoin="round";x.strokeStyle="rgba(200,210,225,.07)";x.lineWidth=5*sc;x.stroke();x.strokeStyle="rgba(200,210,225,.2)";x.lineWidth=1.3;x.stroke();
+  // actin cortex under the membrane
+  x.strokeStyle="rgba(214,184,150,.22)";x.lineWidth=1;x.lineCap="round";x.beginPath();
+  cell.actin.forEach(f=>{const [ux,uy]=A(f.th,f.s),[px,py]=P(ux,uy),ph=Math.atan2(KY*Math.cos(f.th),-KX*Math.sin(f.th))+f.a,l=f.l*rx*(.75+.25*Math.sin(t*.6+f.ph));
+    x.moveTo(px,py);x.quadraticCurveTo(px+Math.cos(ph+.3)*l*.5,py+Math.sin(ph+.3)*l*.5,px+Math.cos(ph)*l,py+Math.sin(ph)*l);});x.stroke();
+  // microtubules
+  x.strokeStyle="rgba(150,175,208,.20)";x.lineWidth=1.1;x.beginPath();
+  cell.mts.forEach(m=>m.pts.forEach((p,j)=>{const [px,py]=P(p[0],p[1]);j?x.lineTo(px,py):x.moveTo(px,py);}));x.stroke();
+  // smooth ER: tubules that branch off the nuclear envelope and wander through the cytoplasm
+  x.strokeStyle="rgba(110,205,190,.22)";x.lineWidth=1.5*sc;x.beginPath();const nodes=[];
+  cell.tub.forEach(u=>{const Q=u.pts.map(([th,s],k)=>{const [ux,uy]=A(th+.012*Math.sin(t*.4+u.ph+k),clamp(s+.012*Math.sin(t*.5+u.ph*2+k),0,1)),q=P(ux,uy);nodes.push(q[0],q[1]);return q;});
+    x.moveTo(Q[0][0],Q[0][1]);for(let k=1;k<Q.length-1;k++)x.quadraticCurveTo(Q[k][0],Q[k][1],(Q[k][0]+Q[k+1][0])/2,(Q[k][1]+Q[k+1][1])/2);x.lineTo(Q[Q.length-1][0],Q[Q.length-1][1]);});x.stroke();
+  x.fillStyle="rgba(110,205,190,.4)";x.beginPath();for(let i=0;i<nodes.length;i+=2){x.moveTo(nodes[i]+1.7*sc,nodes[i+1]);x.arc(nodes[i],nodes[i+1],1.7*sc,0,7);}x.fill();
+  // lipid droplets, lysosomes, peroxisomes, small vesicles
+  cell.blobs.forEach(o=>{const [px,py]=P(o.x,o.y),r=o.r*sc;x.lineWidth=1.1;x.beginPath();x.arc(px,py,r,0,7);
+    if(o.t==="d"){x.fillStyle="rgba(250,225,150,.2)";x.strokeStyle="rgba(250,225,150,.5)";x.fill();x.stroke();x.strokeStyle="rgba(255,248,215,.55)";x.beginPath();x.arc(px,py,r*.62,3.6,4.7);x.stroke();}
+    else if(o.t==="l"){x.fillStyle="rgba(205,225,120,.14)";x.strokeStyle="rgba(205,225,120,.6)";x.fill();x.stroke();x.fillStyle="rgba(205,225,120,.7)";
+      o.d.forEach(([a,k])=>{x.beginPath();x.arc(px+Math.cos(a)*r*k,py+Math.sin(a)*r*k,sc,0,7);x.fill();});}
+    else if(o.t==="p"){x.fillStyle="rgba(235,215,150,.16)";x.strokeStyle="rgba(235,215,150,.55)";x.fill();x.stroke();x.fillStyle="rgba(8,10,14,.75)";x.fillRect(px-r*.35,py-r*.35,r*.7,r*.7);}
+    else{x.fillStyle="rgba(190,210,235,.08)";x.strokeStyle="rgba(190,210,235,.45)";x.fill();x.stroke();}});
+  cell.mito.forEach(m=>drawMito(m,t));
+  // rough ER: stacked sheets hugging the nuclear envelope, studded with ribosomes on the cytoplasmic face
+  x.strokeStyle="rgba(110,205,190,.30)";x.lineWidth=2.3*sc;const dots=[];
+  cell.er.forEach(l=>l.arcs.forEach(([a0,a1])=>{const n=Math.max(4,Math.ceil((a1-a0)*60));x.beginPath();
+    for(let k=0;k<=n;k++){const th=a0+(a1-a0)*k/n,r=l.r+.012*Math.sin(5*th+t*.35+l.ph)+.008*Math.sin(11*th-t*.28+l.ph*2),co=Math.cos(th),si=Math.sin(th),q=P(r*co,r*si);
+      k?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]);if(l.rough){const d=P((r+.014)*co,(r+.014)*si);dots.push(d[0],d[1]);}}x.stroke();}));
+  x.fillStyle="rgba(210,230,225,.55)";const rs=1.5*sc;x.beginPath();for(let i=0;i<dots.length;i+=2)x.rect(dots[i]-rs/2,dots[i+1]-rs/2,rs,rs);x.fill();
+  // Golgi: a stack of curved cisternae with vesicles budding from the outer face
+  {const gt=TH0+.5,[gu,gv]=A(gt,.12),[gx,gy]=P(gu,gv);x.save();x.translate(gx,gy);x.rotate(gt);x.lineCap="round";
+    for(let k=0;k<5;k++){const xk=k*6.5*sc,Lk=(.28-.022*k)*rx,b=.025*rx;x.strokeStyle=`rgba(180,150,235,${.62-.05*k})`;x.lineWidth=3.2*sc;
+      x.beginPath();x.moveTo(xk,-Lk/2);x.quadraticCurveTo(xk-2*b,0,xk,Lk/2);x.stroke();}
+    x.strokeStyle="rgba(180,150,235,.5)";x.lineWidth=1;
+    for(let j=-1;j<=1;j++){x.beginPath();x.arc(34*sc+Math.sin(t*.7+j*2)*3*sc,j*.07*rx+Math.cos(t*.5+j)*3*sc,2.4*sc,0,7);x.stroke();}x.restore();}
+  // centrosome: the pair of centrioles every microtubule grows from
+  {const [u0,v0]=A(TH0,.03),[sx,sy]=P(u0,v0),gl=x.createRadialGradient(sx,sy,0,sx,sy,22*sc);gl.addColorStop(0,"rgba(170,195,230,.28)");gl.addColorStop(1,"rgba(170,195,230,0)");
+    x.fillStyle=gl;x.beginPath();x.arc(sx,sy,22*sc,0,7);x.fill();x.save();x.translate(sx,sy);x.rotate(TH0+.5);x.strokeStyle="rgba(205,220,240,.8)";x.lineWidth=3.2*sc;x.lineCap="round";
+    x.beginPath();x.moveTo(-6*sc,-2*sc);x.lineTo(4*sc,-2*sc);x.moveTo(5*sc,0);x.lineTo(5*sc,9*sc);x.stroke();x.restore();}
+  // free ribosomes
+  x.fillStyle="rgba(205,218,238,.5)";x.beginPath();const rr=1.4*sc;cell.ribo.forEach(o=>{const [px,py]=P(o.x,o.y);x.rect(px-rr/2,py-rr/2,rr,rr);});x.fill();
+  // motor proteins carrying cargo along microtubules, and vesicles fusing with the membrane
+  cell.cargo.forEach(drawCargo);
+  cell.pings.forEach(p=>{const [px,py]=P(p.x,p.y);x.strokeStyle=`rgba(150,235,205,${.7*(1-p.age)})`;x.lineWidth=1.2;x.beginPath();x.arc(px,py,(2+16*p.age)*sc,0,7);x.stroke();});
 }
 const P=(ux,uy)=>[cx+ux*rx,cy+uy*ry],pos=q=>P(q.ax+q.dx,q.ay+q.dy);
 function fit(cvs,ctx){const dpr=Math.min(2,window.devicePixelRatio||1),w=cvs.clientWidth,h=cvs.clientHeight;if(!w||!h)return null;
   if(cvs.width!==Math.round(w*dpr)||cvs.height!==Math.round(h*dpr)){cvs.width=Math.round(w*dpr);cvs.height=Math.round(h*dpr);}
   ctx.setTransform(dpr,0,0,dpr,0,0);return [w,h];}
-function draw(){const f=fit(cv,x);if(!f)return;[W,H]=f;cx=W/2;cy=H*.5;rx=ry=Math.min(W*.46,H*.42);if(rx<12){drawRaster();return;}x.clearRect(0,0,W,H);
+function draw(){const f=fit(cv,x);if(!f)return;[W,H]=f;cx=W/2;cy=H*.5;rx=ry=Math.min(W*(W<H?.34:.30),H*.35);if(rx<12){drawRaster();return;}x.clearRect(0,0,W,H);
+  const nKX=clamp(W*.48/rx,1.4,3.6),nKY=clamp(H*.485/ry,1.4,2.7);sc=clamp(rx/300,.7,1.2);
+  if(Math.abs(nKX-KX)>.002||Math.abs(nKY-KY)>.002){KX=nKX;KY=nKY;layoutCell();}
   // cell and cytoplasm
-  x.fillStyle="rgba(22,28,38,.55)";x.beginPath();x.ellipse(cx,cy,rx*CELL,ry*CELL,0,0,7);x.fill();
-  x.strokeStyle="rgba(200,210,225,.12)";x.lineWidth=1.2;x.stroke();
+  drawCell();
   // nucleus, chromosome territories, nucleoli
   const grd=x.createRadialGradient(cx-rx*.25,cy-ry*.3,rx*.1,cx,cy,rx*1.05);grd.addColorStop(0,"#171E29");grd.addColorStop(1,"#0B0F15");
   x.fillStyle=grd;x.beginPath();x.ellipse(cx,cy,rx,ry,0,0,7);x.fill();
