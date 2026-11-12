@@ -1,8 +1,16 @@
 {
-  "note": "Which projects the Fun Code page shows, and in what order. Each project's details live in its own status.json, in its own repo. Set listed to false to hide one.",
+  "note": "Which projects the Fun Code page shows, and in what order. Each project's details live in its own status.json, in its own repo. Set listed to false to hide one. A project's tutorial entry is where its card leads; the tutorials themselves are on tutorials.html, with their files in /tutorials/.",
   "groups": [
-    { "id": "research", "title": "Research software", "blurb": "Tools for simulating chromatin and for checking how well live-cell analysis recovers the truth." },
-    { "id": "side", "title": "Side projects", "blurb": "Built for fun, in the same spirit of learning by making." }
+    {
+      "id": "research",
+      "title": "Research software",
+      "blurb": "Tools for simulating chromatin, designing probes and checking how well live-cell analysis recovers the truth."
+    },
+    {
+      "id": "side",
+      "title": "Side projects",
+      "blurb": "Built for fun, in the same spirit of learning by making."
+    }
   ],
   "projects": [
     {
@@ -12,7 +20,30 @@
       "page": "/chromatin-studio/",
       "title": "Chromatin Studio",
       "tagline": "A visual builder and simulator for chromatin, reacting proteins, histone marks, cohesin and transcription.",
-      "stage": "Research prototype"
+      "stage": "Research prototype",
+      "tutorial": {
+        "href": "/tutorials.html#chromatin-studio",
+        "label": "Watch the tutorial"
+      }
+    },
+    {
+      "slug": "raserfish-design-studio",
+      "repo": "CHB-Bohrer/RASERFISH-Design-Studio",
+      "group": "research",
+      "page": "/RASERFISH-Design-Studio/",
+      "title": "RASERFISH Design Studio",
+      "tagline": "A local browser application for designing and reviewing RASER-FISH primary probes for chromatin tracing.",
+      "stage": "Version 1.6.1",
+      "tags": [
+        "RASER-FISH",
+        "probe design",
+        "chromatin tracing",
+        "BLAST"
+      ],
+      "tutorial": {
+        "href": "/tutorials.html#raserfish-design-studio",
+        "label": "Watch the tutorial"
+      }
     },
     {
       "slug": "sim-live-cell-analysis",
@@ -21,7 +52,11 @@
       "page": "/Sim_Live_Cell_Analysis/",
       "title": "Sim Live Cell Analysis",
       "tagline": "Validate live-cell chromatin-locus analysis against simulated movies with known ground truth.",
-      "stage": "Working prototype"
+      "stage": "Working prototype",
+      "tutorial": {
+        "href": "/tutorials.html#sim-live-cell-analysis",
+        "label": "Open the tutorial"
+      }
     },
     {
       "slug": "marchland",

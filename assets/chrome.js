@@ -5,6 +5,7 @@
   "use strict";
   var LAB_HOME = "/";            // where "Lab home" points
   var PROJECTS = "/projects.html";
+  var TUTORIALS = "/tutorials.html";
   var LEARNED = "/learned.html";
   var JOIN = "/#join";
 
@@ -18,13 +19,14 @@
     '<nav class="hnav" aria-label="Main">' +
     '<a class="back" href="' + LAB_HOME + '">&larr; Lab home</a>' +
     '<a class="back" href="' + PROJECTS + '"' + cur(PROJECTS) + '>Fun Code</a>' +
+    '<a class="back" href="' + TUTORIALS + '"' + cur(TUTORIALS) + '>Tutorials</a>' +
     '<a class="back" href="' + LEARNED + '"' + cur(LEARNED) + '>Learned</a>' +
     '<a class="pill" href="' + JOIN + '">Join the lab</a>' +
     '</nav></header>';
 
   var footer =
     '<footer class="site-foot"><a href="' + LAB_HOME + '">The Bohrer Lab</a> &middot; Department of Physics, The Ohio State University' +
-    '<span class="sep">|</span><a href="' + PROJECTS + '">Fun Code</a><span class="sep">|</span><a href="' + LEARNED + '">Things I have learned</a></footer>';
+    '<span class="sep">|</span><a href="' + PROJECTS + '">Fun Code</a><span class="sep">|</span><a href="' + TUTORIALS + '">Tutorials</a><span class="sep">|</span><a href="' + LEARNED + '">Things I have learned</a></footer>';
 
   document.body.insertAdjacentHTML("afterbegin", header);
   var add = function () { document.body.insertAdjacentHTML("beforeend", footer); };

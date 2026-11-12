@@ -153,3 +153,22 @@
 .proof .ln-row a.ln-more:hover{text-decoration:underline}
 
 @media (prefers-reduced-motion:reduce){.pj-card,.pj-node,.pj-node .pj-chev{transition:none}.pj-card:hover{transform:none}.ln-item.flash{animation:none}}
+
+/* ---------- tutorials page ---------- */
+.pg-lede a{color:var(--acc)}
+.tut-toc{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 0}
+.tut-toc a{font:600 .88rem/1 var(--sans);padding:10px 16px;border-radius:2em;border:1.5px solid var(--line);text-decoration:none;color:var(--ink);transition:border-color .15s}
+.tut-toc a:hover{border-color:var(--ink)}
+.tut{max-width:60rem;margin-top:clamp(40px,5vw,64px);padding-top:clamp(28px,3vw,40px);border-top:1px solid var(--line);scroll-margin-top:84px}
+.tut-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px}
+.tut-head h2{font-size:clamp(1.5rem,2.4vw,2rem)}
+.tut-len{font:400 .76rem/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.tut-sub{margin-top:.7rem;max-width:44rem;color:var(--mut);font-size:1.05rem;line-height:1.5}
+.tut-video,.tut-poster{display:block;width:100%;margin-top:20px;aspect-ratio:16/9;border-radius:12px;border:1px solid var(--line);background:#0B0E13;overflow:hidden}
+.tut-poster{position:relative;text-decoration:none}
+.tut-poster img{display:block;width:100%;height:100%;object-fit:cover;opacity:.72;transition:opacity .2s}
+.tut-poster:hover img,.tut-poster:focus-visible img{opacity:.9}
+.tut-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:14px 24px;border-radius:2em;background:var(--btn,#C8102E);color:#fff;font:600 1rem/1 var(--sans);white-space:nowrap;box-shadow:0 12px 30px -10px rgba(0,0,0,.7)}
+.tut-links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:14px;font-size:.92rem;font-weight:600}
+.tut-links a{color:var(--acc);text-decoration:none}
+.tut-links a:hover{text-decoration:underline}

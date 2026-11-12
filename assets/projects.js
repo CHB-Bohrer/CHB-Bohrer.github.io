@@ -33,16 +33,17 @@
        Only offered once the project's own page is published, because that is where the tutorial is served from. */
     var way = r.live ? ((s.links || []).filter(function (l) { return l.primary; })[0] || (s.live && s.live.href ? s.live : null)) : null;
     var wayHref = way && BL.safeUrl(way.href, location.origin + r.base);
+    /* A tutorial listed in data/projects.json is hosted on this site (tutorials.html), so it works whether or not the project's own page is published. */
+    var tut = e.tutorial && e.tutorial.href ? { href: BL.safeUrl(e.tutorial.href, location.origin + "/"), label: e.tutorial.label || "Watch the tutorial" } : null;
+    if (tut) { wayHref = tut.href; way = tut; }
     /* The card itself (its title, and so a click anywhere on it) leads to the tutorial when there is one. */
     var href = wayHref || (r.live ? r.base : ghUrl(e.repo));
     var tags = (s.tags || e.tags || []).slice(0, 4);
 
     /* Tutorial first, then status, then code. */
     var links = [];
-    if (r.live) {
-      if (wayHref) links.push(h("a", { class: "pj-go", href: wayHref, text: (way.label || "Open the tutorial") + " \u2192" }));
-      links.push(h("a", { href: r.base, text: "Project status" }));
-    }
+    if (wayHref) links.push(h("a", { class: "pj-go", href: wayHref, text: (way.label || "Open the tutorial") + " \u2192" }));
+    if (r.live) links.push(h("a", { href: r.base, text: "Project status" }));
     links.push(h("a", { href: ghUrl(e.repo), target: "_blank", rel: "noopener", text: "Code on GitHub" }));
 
     var pushed = h("span", { class: "pj-pushed" });
