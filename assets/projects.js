@@ -29,17 +29,19 @@
     var title = s.title || e.title, tagline = s.tagline || e.tagline;
     var nodes = BL.allNodes(s.board);
     var labels = s.board && s.board.state_labels;
-    var href = r.live ? r.base : ghUrl(e.repo);
+    /* The way in that explains the project: its tutorial (the link marked primary in status.json), else its live demo.
+       Only offered once the project's own page is published, because that is where the tutorial is served from. */
+    var way = r.live ? ((s.links || []).filter(function (l) { return l.primary; })[0] || (s.live && s.live.href ? s.live : null)) : null;
+    var wayHref = way && BL.safeUrl(way.href, location.origin + r.base);
+    /* The card itself (its title, and so a click anywhere on it) leads to the tutorial when there is one. */
+    var href = wayHref || (r.live ? r.base : ghUrl(e.repo));
     var tags = (s.tags || e.tags || []).slice(0, 4);
 
-    /* The first thing a visitor should get is the way in that explains the project: its guided tour / tutorial
-       (the link marked primary in status.json), else its live demo. Code comes last. Needs the project's page to be published. */
+    /* Tutorial first, then status, then code. */
     var links = [];
     if (r.live) {
-      var way = (s.links || []).filter(function (l) { return l.primary; })[0] || (s.live && s.live.href ? s.live : null);
-      var wayHref = way && BL.safeUrl(way.href, location.origin + r.base);
-      if (wayHref) links.push(h("a", { class: "pj-go", href: wayHref, text: "\u25B6 " + (way.label || "Take the tour") }));
-      links.push(h("a", { href: r.base, text: "Where it stands" }));
+      if (wayHref) links.push(h("a", { class: "pj-go", href: wayHref, text: (way.label || "Open the tutorial") + " \u2192" }));
+      links.push(h("a", { href: r.base, text: "Project status" }));
     }
     links.push(h("a", { href: ghUrl(e.repo), target: "_blank", rel: "noopener", text: "Code on GitHub" }));
 

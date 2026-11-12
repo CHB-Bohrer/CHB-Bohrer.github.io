@@ -151,3 +151,50 @@ ol.refs > li{margin-inline:-14px;padding:12px 14px;border-radius:10px;transition
   .js .head.rv:not(.in)::after{transform:none}
 }
 @media print{#sprog,.ticker,.bigmark{display:none!important}}
+
+/* ==========================================================================
+   Restraint pass (Nov 2026): the same layout and content, with the showier effects turned down
+   so the page reads as a faculty lab site first. Delete this block to get the louder look back.
+   ========================================================================== */
+/* no film grain; the reading-progress line is a flat hairline */
+body::after{display:none}
+#sprog{height:2px;background:var(--btn);box-shadow:none}
+
+/* banner: headline back to a measured size, the italic line in plain white, no pulsing dot */
+#banner h1{font-size:clamp(2.4rem,6vw,4.9rem);line-height:1.04;letter-spacing:-.022em}
+#banner h1 em{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#fff;-webkit-text-fill-color:currentColor;filter:none;text-shadow:0 2px 28px rgba(0,0,0,.7);padding:0 0 .08em}
+.eyebrow .dot{animation:none}
+.js .b-in > *{animation-name:rise-plain;animation-duration:.7s}
+@keyframes rise-plain{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* scroll reveal: a short fade, no blur */
+.js .rv{transform:translateY(12px);filter:none;transition:opacity .5s ease,transform .5s ease}
+
+/* panels and buttons: no pointer-following light, sheen, glow or lift */
+.tfig::after,.follow::after,.proof::after,.fcard::after,.pj-card::after,.cv-card::after,
+.tfig::before,.follow::before,.proof::before,.cv-card::before,.btn.special::before{display:none}
+.tfig:hover,.btn:hover,.b-pause:hover,.social a:hover{transform:none}
+.tfig:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 18px 40px -28px rgba(0,0,0,.7)}
+.btn.special,.on-red .btn.special,.join-cols .icon,.social a:hover,#menu a.pill:hover{box-shadow:none}
+.pm-dot:hover::before,.pm-dot.hl::before,.pm-dot:focus-visible::before{box-shadow:0 0 0 5px rgba(var(--glow),.22)}
+
+/* scarlet sections: a deeper, flatter scarlet; the portrait sits still in a plain frame */
+:root{--red:#8E101E;--red-hi:#9C1524}
+#two{background-image:none}
+#join{background:var(--red)}
+.spot .image.pw{background:#7A0D19;perspective:none}
+.photo{transform:none!important;outline-color:rgba(255,255,255,.28)}
+.pw:hover .photo{box-shadow:none}
+.path li:hover::before{transform:none}
+@media (hover:hover){.join-cols li:hover{padding-left:0}}
+@media (hover:hover) and (min-width:621px){.nitem:hover{padding-left:0}.nitem:hover::before{transform:scaleY(0)}}
+
+/* publications: solid, modest year labels instead of large outlined numerals */
+@media (min-width:621px){
+  .yg{grid-template-columns:96px minmax(0,1fr)}
+  .yg h3,.yg:hover h3{font-size:1.6rem;font-weight:500;line-height:1.2;letter-spacing:-.01em;color:var(--mut);-webkit-text-stroke:0}
+}
+
+/* footer: no oversized outlined wordmark */
+.bigmark{display:none}
+.bigmark + .legal{margin-top:64px}

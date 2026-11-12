@@ -103,8 +103,14 @@ img{max-width:100%}
 #start{background:var(--b3)}
 .st-eyebrow{font:500 .78rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.9rem}
 .st{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:0 64px}
-.st-fig{position:sticky;top:calc(88px + env(safe-area-inset-top,0px));align-self:start;margin:0;background:#0E1116;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 14px 8px;color:#E9ECF1;box-shadow:0 24px 60px rgba(0,0,0,.18)}
-.st-now{display:flex;gap:14px;align-items:baseline;padding:4px 6px 10px;font:400 .78rem/1.3 var(--mono);color:#98A0AD;font-variant-numeric:tabular-nums}
+.st-fig{position:sticky;top:calc(88px + env(safe-area-inset-top,0px));align-self:start;margin:0;background:linear-gradient(180deg,#11151C,#0B0E13);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 14px 8px;color:#E9ECF1;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 28px 64px -24px rgba(0,0,0,.55)}
+.st-key{list-style:none;margin:0;padding:8px 6px 10px;display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;border-top:1px solid rgba(255,255,255,.07);font:400 .72rem/1.2 var(--mono);color:#98A0AD}
+.st-key li{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.st-key i{flex:none;display:block;width:9px;height:9px;border-radius:50%}
+.st-key i.bar{width:16px;height:4px;border-radius:2px}
+.st-prog{height:2px;margin:0 6px 2px;border-radius:2px;background:#1C222B;overflow:hidden}
+.st-prog b{display:block;height:100%;width:100%;background:#F0566F;transform-origin:0 50%;transform:scaleX(.14);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.st-now{display:flex;gap:14px;align-items:baseline;padding:4px 6px 9px;font:400 .78rem/1.3 var(--mono);color:#98A0AD;font-variant-numeric:tabular-nums}
 .st-now b{font:600 1.02rem/1.2 var(--sans);color:#E9ECF1;letter-spacing:-.005em}
 #st-cv{display:block;width:100%;height:min(540px,60vh);touch-action:pan-y}
 .st-dots{display:flex;gap:4px;justify-content:center;padding:6px 0 0}
@@ -114,8 +120,8 @@ img{max-width:100%}
 .st-dots button[aria-current="step"]::before{background:#F0566F;transform:scale(1.4)}
 .st-dots button:focus-visible{outline:2px solid #FF5A74;outline-offset:0}
 .st-steps{list-style:none;margin:0;padding:4vh 0 6vh}
-.st-step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;opacity:.3;transition:opacity .5s ease}
-.st-step.on{opacity:1}
+.st-step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transform:translateY(10px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.st-step.on{opacity:1;transform:none}
 .st-step .k{font:500 .8rem/1 var(--mono);letter-spacing:.08em;color:var(--acc)}
 .st-step h3{margin-top:.7rem;font-size:clamp(1.6rem,2.6vw,2.2rem)}
 .st-step p{margin-top:1rem;font-size:1.08rem;max-width:32rem}
@@ -126,11 +132,11 @@ img{max-width:100%}
   .st-fig{top:calc(68px + env(safe-area-inset-top,0px));z-index:3;padding:8px 8px 6px;border-radius:12px}
   #st-cv{height:min(36vh,330px)}
   .st-now{padding:2px 4px 6px}
-  .st-dots{display:none}
+  .st-dots,.st-key{display:none}
   .st-steps{padding-top:2vh}
   .st-step{min-height:62vh;justify-content:flex-start;padding-top:6vh}
 }
-@media (prefers-reduced-motion:reduce){.st-step{opacity:1}}
+@media (prefers-reduced-motion:reduce){.st-step{opacity:1;transform:none;transition:none}.st-prog b{transition:none}}
 
 
 body{background:var(--b3)}
@@ -146,8 +152,16 @@ body{background:var(--b3)}
   <div class="head"><p class="st-eyebrow">Start here</p><h2 id="st-h">The life of one gene</h2><p class="major">A five-minute story for undergraduates, prospective students and anyone curious. Scroll to follow a single gene as it switches on, fires and falls silent.</p></div>
   <div class="st">
     <figure class="st-fig" aria-describedby="st-live">
-      <div class="st-now"><span id="st-n">01 / 06</span><b id="st-t">Meet the gene</b></div>
+      <div class="st-now"><span id="st-n">01 / 07</span><b id="st-t">Meet the gene</b></div>
+      <div class="st-prog" aria-hidden="true"><b id="st-p"></b></div>
       <canvas id="st-cv" role="img" aria-label="Animated sketch of one gene inside a nucleus. A strand of DNA carries a red gene and a blue-violet enhancer. Blue transcription factors wander past; one finds the gene's promoter, a loop brings the enhancer close, RNA polymerases copy the gene and red messenger RNAs drift away. A trace below records when the promoter is on and how many messenger RNAs the cell holds."></canvas>
+      <ul class="st-key" aria-label="Key to the drawing">
+        <li><i style="background:#5AB0E8"></i>Transcription factor</li>
+        <li><i style="background:#8D96A4"></i>Nucleosome</li>
+        <li><i style="background:#D5D9E0"></i>RNA polymerase</li>
+        <li><i class="bar" style="background:#F0566F"></i>Gene, mRNA</li>
+        <li><i class="bar" style="background:#9599E8"></i>Enhancer</li>
+      </ul>
       <div class="st-dots" id="st-dots" aria-label="Story steps"></div>
       <p class="sr" id="st-live" aria-live="polite"></p>
     </figure>
@@ -208,16 +222,16 @@ body{background:var(--b3)}
 const sec=document.getElementById("start");if(!sec)return;
 const cv=document.getElementById("st-cv"),ctx=cv.getContext("2d");
 const fig=sec.querySelector(".st-fig"),steps=[...sec.querySelectorAll(".st-step")];
-const nEl=document.getElementById("st-n"),tEl=document.getElementById("st-t"),live=document.getElementById("st-live"),dotsEl=document.getElementById("st-dots");
+const pEl=document.getElementById("st-p"),nEl=document.getElementById("st-n"),tEl=document.getElementById("st-t"),live=document.getElementById("st-live"),dotsEl=document.getElementById("st-dots");
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const INK="#E9ECF1",MUT="#98A0AD",RULE="#2A313C",SCAR="#F0566F",BLUE="90,176,232",ENH="149,153,232",HOT="255,158,84",POL="#C9CDD6";
 const MONO='"IBM Plex Mono",ui-monospace,Menlo,monospace';
 const P=.52,G=.82,A=.17,AE=.23; // promoter, gene end, enhancer span (fractions along the DNA)
 const TOT=steps.length;
-let W=0,H=0,SH=0,step=0;
+let W=0,H=0,SH=0,step=0,K=1; // K scales marks and line weights with the size of the drawing
 
 /* ---- layout ---- */
-function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);W=Math.max(1,r.width);H=Math.max(1,r.height);cv.width=Math.round(W*d);cv.height=Math.round(H*d);ctx.setTransform(d,0,0,d,0,0);SH=H*(W<560?.64:.76);}
+function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);W=Math.max(1,r.width);H=Math.max(1,r.height);cv.width=Math.round(W*d);cv.height=Math.round(H*d);ctx.setTransform(d,0,0,d,0,0);SH=H*(W<560?.64:.76);K=Math.max(.72,Math.min(1.12,W/600));}
 const lerp=(a,b,t)=>a+(b-a)*t, clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
 /* state that eases toward per-step targets */
@@ -334,48 +348,77 @@ function strokeRange(u0,u1,style,w,alpha){
   ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=style;ctx.lineWidth=w;ctx.lineCap="round";ctx.lineJoin="round";
   ctx.beginPath();const i0=Math.floor(u0*NP),i1=Math.ceil(u1*NP);for(let i=i0;i<=i1;i++){const q=PTS[i];i===i0?ctx.moveTo(q.x,q.y):ctx.lineTo(q.x,q.y);}ctx.stroke();ctx.restore();
 }
-function label(txt,x,y,a,align,col){if(a<.02)return;ctx.save();ctx.globalAlpha=a;ctx.font="11px "+MONO;const tw=ctx.measureText(txt).width;align=align||"center";let l=align==="center"?x-tw/2:align==="right"?x-tw:x;l=clamp(l,6,W-6-tw);x=l;align="left";ctx.textAlign=align;ctx.fillStyle=col||MUT;ctx.fillText(txt,x,y);ctx.restore();}
-function squiggle(x,y,rot,len,a){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=a;ctx.strokeStyle=SCAR;ctx.lineWidth=1.8;ctx.lineCap="round";ctx.beginPath();for(let i=0;i<=10;i++){const s=i/10*len-len/2,yy=Math.sin(i/10*Math.PI*2.4)*2.2;i?ctx.lineTo(s,yy):ctx.moveTo(s,yy);}ctx.stroke();ctx.restore();}
+function rrect(x,y,w,h,r){ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);else ctx.rect(x,y,w,h);}
+/* labels sit on a small dark plate so they stay readable over the drawing */
+function label(txt,x,y,a,align,col){if(a<.02)return;ctx.save();ctx.globalAlpha=a;const fs=W<560?11:12;ctx.font="500 "+fs+"px "+MONO;const tw=ctx.measureText(txt).width;align=align||"center";let l=align==="center"?x-tw/2:align==="right"?x-tw:x;l=clamp(l,10,W-10-tw);
+  ctx.fillStyle="rgba(11,14,19,.82)";rrect(l-6,y-fs-2,tw+12,fs+9,5);ctx.fill();ctx.strokeStyle="rgba(255,255,255,.08)";ctx.lineWidth=1;ctx.stroke();
+  ctx.textAlign="left";ctx.fillStyle=col||"#B4BBC6";ctx.fillText(txt,l,y);ctx.restore();}
+function squiggle(x,y,rot,len,a){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=a;ctx.strokeStyle=SCAR;ctx.lineWidth=2*K;ctx.lineCap="round";ctx.lineJoin="round";ctx.beginPath();for(let i=0;i<=12;i++){const s=i/12*len-len/2,yy=Math.sin(i/12*Math.PI*2.6)*2.6*K;i?ctx.lineTo(s,yy):ctx.moveTo(s,yy);}ctx.stroke();
+  ctx.fillStyle="#FFB3C0";ctx.beginPath();ctx.arc(-len/2,0,1.9*K,0,7);ctx.fill();ctx.restore();}
+/* a soft-edged sphere: halo, body with a highlight, thin dark rim */
+function orb(x,y,r,rgb,a,halo){
+  if(halo>0){const g=ctx.createRadialGradient(x,y,r*.6,x,y,r*halo);g.addColorStop(0,`rgba(${rgb},${.34*a})`);g.addColorStop(1,`rgba(${rgb},0)`);ctx.globalAlpha=1;ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r*halo,0,7);ctx.fill();}
+  const g2=ctx.createRadialGradient(x-r*.35,y-r*.4,r*.08,x,y,r);g2.addColorStop(0,"rgba(255,255,255,.95)");g2.addColorStop(.35,`rgb(${rgb})`);g2.addColorStop(1,`rgba(${rgb},.72)`);
+  ctx.globalAlpha=a;ctx.fillStyle=g2;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill();ctx.strokeStyle="rgba(11,14,19,.55)";ctx.lineWidth=1;ctx.stroke();ctx.globalAlpha=1;}
+/* out-of-focus chromatin behind the gene, so the scene reads as the inside of a nucleus */
+const BG=[[-.05,.14,1.1,5.2,.035,.5,.22,.075,9],[-.1,.33,1.2,3.6,.05,2.1,-.16,.05,13],[0,.86,1.05,4.4,.03,4,.19,.07,10],[-.08,.52,1.2,2.9,.045,1.2,.12,.035,16],[.1,.97,.95,6,.02,3.3,-.25,.06,8]];
+function backdrop(){
+  const g=ctx.createRadialGradient(W*.5,SH*.55,0,W*.5,SH*.55,Math.max(W,SH)*.66);g.addColorStop(0,"rgba(125,145,185,.11)");g.addColorStop(.6,"rgba(125,145,185,.03)");g.addColorStop(1,"rgba(125,145,185,0)");
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,SH);
+  ctx.save();ctx.beginPath();ctx.rect(0,0,W,SH);ctx.clip();ctx.lineCap="round";ctx.lineJoin="round";
+  for(const f of BG){ctx.beginPath();for(let i=0;i<=48;i++){const u=i/48,x=(f[0]+u*f[2])*W,y=(f[1]+Math.sin(u*f[3]*3+f[5]+S.t*f[6])*f[4]+Math.sin(u*f[3]*7.3+f[5]*2)*f[4]*.35)*SH;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+    ctx.strokeStyle=`rgba(152,164,186,${f[7]})`;ctx.lineWidth=f[8]*K;ctx.stroke();}
+  ctx.restore();
+}
 function draw(){
   ctx.clearRect(0,0,W,H);
   if(!PTS.length)buildPts();
-  // DNA backbone
-  strokeRange(0,1,INK,1.6,.42);
+  backdrop();
+  // DNA: a pale fibre with a dark core line, so it reads as two strands
+  strokeRange(0,1,"#0B0E13",5.4*K,.55);strokeRange(0,1,INK,3.2*K,.62);strokeRange(0,1,"#0E1116",1*K,.75);
+  // where the looped enhancer meets the promoter
+  {const c=Math.max(0,S.loop-.55)/.45*Math.max(S.lab.enh,S.lab.hij,on?1:.35);if(c>.02){const q=at(P),rr=34*K,gg=ctx.createRadialGradient(q.x-4*K,q.y,0,q.x-4*K,q.y,rr);gg.addColorStop(0,`rgba(${S.lab.hij>.5?HOT:ENH},${.3*c})`);gg.addColorStop(1,`rgba(${ENH},0)`);ctx.fillStyle=gg;ctx.beginPath();ctx.arc(q.x-4*K,q.y,rr,0,7);ctx.fill();}}
   // enhancer and gene
   const eh=S.lab.hij,ec=`rgb(${[0,1,2].map(j=>Math.round(lerp(+ENH.split(",")[j],+HOT.split(",")[j],eh))).join(",")})`;
-  if(eh>.05){ctx.save();ctx.shadowColor=`rgba(${HOT},${eh})`;ctx.shadowBlur=16*eh;strokeRange(A-.02*eh,AE+.02*eh,ec,3.4+2.4*eh,.9);ctx.restore();}
-  strokeRange(A-.02*eh,AE+.02*eh,ec,3.4+2.4*eh,.35+.6*Math.max(S.lab.enh,eh)+.2*S.loop);
+  if(eh>.05){ctx.save();ctx.shadowColor=`rgba(${HOT},${eh})`;ctx.shadowBlur=16*eh;strokeRange(A-.02*eh,AE+.02*eh,ec,(5+2.4*eh)*K,.9);ctx.restore();}
+  strokeRange(A-.02*eh,AE+.02*eh,ec,(5+2.4*eh)*K,Math.min(1,.45+.55*Math.max(S.lab.enh,eh)+.2*S.loop));
   const glow=on?1:0;
-  if(on||pols.length){ctx.save();ctx.shadowColor=SCAR;ctx.shadowBlur=14;strokeRange(P,G,SCAR,3.4,.9);ctx.restore();}
-  strokeRange(P,G,SCAR,3.2,.55+.45*glow+(pols.length?.3:0));
-  // promoter mark
-  const pp=at(P);ctx.save();ctx.fillStyle=SCAR;ctx.globalAlpha=.9;ctx.beginPath();ctx.moveTo(pp.x,pp.y+1);ctx.lineTo(pp.x,pp.y-12);ctx.lineTo(pp.x+8,pp.y-9);ctx.lineTo(pp.x,pp.y-6);ctx.fill();ctx.restore();
+  if(on||pols.length){ctx.save();ctx.shadowColor=SCAR;ctx.shadowBlur=18;strokeRange(P,G,SCAR,5*K,.9);ctx.restore();}
+  strokeRange(P,G,SCAR,5*K,Math.min(1,.6+.4*glow+(pols.length?.3:0)));
+  strokeRange(P,G,"#FFC2CB",1*K,.35+.4*glow);
+  // promoter: the bent arrow used for a transcription start site
+  const pp=at(P);ctx.save();ctx.strokeStyle=SCAR;ctx.fillStyle=SCAR;ctx.lineWidth=2*K;ctx.lineCap="round";ctx.lineJoin="round";ctx.globalAlpha=.95;
+  {const ah=15*K,aw=13*K,hd=4.2*K;ctx.beginPath();ctx.moveTo(pp.x,pp.y);ctx.lineTo(pp.x,pp.y-ah);ctx.lineTo(pp.x+aw,pp.y-ah);ctx.stroke();ctx.beginPath();ctx.moveTo(pp.x+aw+hd,pp.y-ah);ctx.lineTo(pp.x+aw-1,pp.y-ah-hd);ctx.lineTo(pp.x+aw-1,pp.y-ah+hd);ctx.closePath();ctx.fill();}
+  ctx.restore();
   // nucleosomes: evicted from the gene region as it opens
   for(let i=1;i<64;i++){const u=i/64,q=at(u),inGene=u>P-.05&&u<G+.02,a=inGene?(1-S.open*.9):1;if(a<.05)continue;
-    const r=inGene?4.6+(1-S.open)*1.2:4.2;ctx.globalAlpha=.8*a;ctx.fillStyle="#5E6674";ctx.beginPath();ctx.arc(q.x,q.y+ (i%2?3:-3)*(inGene?(1-S.open):0.4),r,0,7);ctx.fill();}
+    const r=(inGene?5.6+(1-S.open)*1.2:5.2)*K,nx=q.x,ny=q.y+(i%2?3:-3)*(inGene?(1-S.open):0.4);
+    const ng=ctx.createRadialGradient(nx-r*.35,ny-r*.4,r*.1,nx,ny,r);ng.addColorStop(0,"#B7BECA");ng.addColorStop(.55,"#7C8695");ng.addColorStop(1,"#4A5361");
+    ctx.globalAlpha=.95*a;ctx.fillStyle=ng;ctx.beginPath();ctx.arc(nx,ny,r,0,7);ctx.fill();ctx.strokeStyle="rgba(11,14,19,.65)";ctx.lineWidth=1;ctx.stroke();
+    ctx.strokeStyle="rgba(233,236,241,.5)";ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(nx,ny,r*.98,r*.36,-.4,0,7);ctx.stroke();}
   ctx.globalAlpha=1;
   // polymerases with growing RNA tails
-  for(const p of pols){const q=at(p.u),f=(p.u-P)/(G-P);ctx.strokeStyle=SCAR;ctx.lineWidth=1.6;ctx.globalAlpha=.9;ctx.beginPath();for(let i=0;i<=8;i++){const s=i/8,xx=q.x-4-s*6,yy=q.y-6-s*(4+f*16)+Math.sin(s*9+S.t*3)*1.5;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);}ctx.stroke();
-    ctx.globalAlpha=1;ctx.fillStyle=POL;ctx.beginPath();ctx.arc(q.x,q.y,5.4,0,7);ctx.fill();}
+  for(const p of pols){const q=at(p.u),f=(p.u-P)/(G-P);ctx.strokeStyle=SCAR;ctx.lineWidth=2*K;ctx.lineCap="round";ctx.globalAlpha=.95;ctx.beginPath();for(let i=0;i<=10;i++){const s=i/10,xx=q.x-4*K-s*7*K,yy=q.y-7*K-s*(5+f*20)*K+Math.sin(s*9+S.t*3)*1.6*K;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);}ctx.stroke();
+    orb(q.x,q.y,7*K,"213,217,224",1,0);}
   // mRNAs
-  for(const m of mrnas){const a=Math.min(1,m.age*3)*Math.min(1,(m.life-m.age)/1.2);squiggle(m.x,m.y,m.rot,13,a);}
+  for(const m of mrnas){const a=Math.min(1,m.age*3)*Math.min(1,(m.life-m.age)/1.2);squiggle(m.x,m.y,m.rot,17*K,a);}
   // transcription factors
-  for(const f of TF){const p=toPx(f);ctx.globalAlpha=f.stuck>0?.95:.6;ctx.fillStyle=`rgb(${BLUE})`;ctx.beginPath();ctx.arc(p.x,p.y,3.1,0,7);ctx.fill();}
+  for(const f of TF){const p=toPx(f);orb(p.x,p.y,4*K,BLUE,f.stuck>0?1:.72,f.stuck>0?3.2:2.6);}
   const hp=toPx(hero),hi=step>=1?1:0;
-  ctx.globalAlpha=1;ctx.fillStyle=`rgb(${BLUE})`;ctx.beginPath();ctx.arc(hp.x,hp.y,3.4+hi*1.8,0,7);ctx.fill();
-  if(hi){ctx.strokeStyle=`rgba(${BLUE},.55)`;ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(hp.x,hp.y,9+Math.sin(S.t*3)*1.2,0,7);ctx.stroke();}
-  if(hero.flash>0){ctx.strokeStyle=`rgba(${BLUE},${hero.flash*.8})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(hp.x,hp.y,10+(1-hero.flash)*16,0,7);ctx.stroke();}
+  orb(hp.x,hp.y,(4.2+hi*2)*K,BLUE,1,hi?3.6:2.6);
+  if(hi){ctx.strokeStyle=`rgba(${BLUE},.6)`;ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(hp.x,hp.y,(11.5+Math.sin(S.t*3)*1.2)*K,0,7);ctx.stroke();}
+  if(hero.flash>0){ctx.strokeStyle=`rgba(${BLUE},${hero.flash*.8})`;ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(hp.x,hp.y,(12+(1-hero.flash)*20)*K,0,7);ctx.stroke();}
   // labels
   const gm=at((P+G)/2),en=at((A+AE)/2);
-  label(step===6||S.lab.hij>.5?"MYC, a growth gene":"gene",gm.x,gm.y+26,S.lab.gene,"center",SCAR);
-  label("promoter",pp.x-4,pp.y+26,S.lab.prom,"right");
-  label("enhancer",en.x-12,en.y-10,S.lab.enh*(1-S.lab.hij),"right",`rgb(${ENH})`);
-  label("misplaced antibody enhancer",en.x-12,en.y-12,S.lab.hij,"right",`rgb(${HOT})`);
+  label(step===6||S.lab.hij>.5?"MYC, a growth gene":"gene",gm.x,gm.y+32*K,S.lab.gene,"center",SCAR);
+  label("promoter",pp.x-8,pp.y+32*K,S.lab.prom,"right");
+  label("enhancer",en.x-16,en.y-12,S.lab.enh*(1-S.lab.hij),"right",`rgb(${ENH})`);
+  label("misplaced antibody enhancer",en.x-16,en.y-14,S.lab.hij,"right",`rgb(${HOT})`);
   drawTissue();
-  label("transcription factor",hp.x,hp.y-16,S.lab.tf*(hero.mode==="bound"?.0:1),"center",`rgb(${BLUE})`);
-  if(pols.length){const q=at(pols[pols.length-1].u);label("RNA polymerase",q.x,q.y+24,S.lab.pol);}
-  if(mrnas.length){const m=mrnas[mrnas.length-1];label("mRNA",m.x,m.y-12,S.lab.mrna*.9,"center",SCAR);}
-  label("nucleosomes",GE.pad,GE.cy+30,S.lab.gene*(1-S.loop)*(step===0?1:0),"left");
+  label("transcription factor",hp.x,hp.y-22*K,S.lab.tf*(hero.mode==="bound"?.0:1),"center",`rgb(${BLUE})`);
+  if(pols.length){const q=at(pols[pols.length-1].u);label("RNA polymerase",q.x,q.y+32*K,S.lab.pol);}
+  if(mrnas.length){const m=mrnas[mrnas.length-1];label("mRNA",m.x,m.y-14*K,S.lab.mrna*.9,"center",SCAR);}
+  label("nucleosomes",GE.pad+4,GE.cy+34*K,S.lab.gene*(1-S.loop)*(step===0?1:0),"left");
   drawTrace();
 }
 function drawTissue(){
@@ -394,21 +437,27 @@ function drawTissue(){
   ctx.restore();ctx.restore();
 }
 function drawTrace(){
-  const x0=10,x1=W-10,top=SH+14,bh=8,ly=top+bh+18,lh=H-ly-8;
-  ctx.fillStyle=RULE;ctx.fillRect(x0,SH+2,x1-x0,1);
-  ctx.font="10.5px "+MONO;ctx.textAlign="left";ctx.fillStyle=MUT;ctx.globalAlpha=1;
-  ctx.fillText("promoter on",x0,top-2);ctx.textAlign="right";ctx.fillText("last 30 s",x1,top-2);
+  const x0=12,x1=W-12,top=SH+16,bh=9,ly=top+bh+20,lh=H-ly-8;
+  ctx.globalAlpha=1;ctx.fillStyle="rgba(8,10,14,.55)";rrect(2,SH+1,W-4,H-SH-2,9);ctx.fill();ctx.strokeStyle="rgba(255,255,255,.07)";ctx.lineWidth=1;ctx.stroke();
+  const fs=W<560?10.5:11.5;ctx.font=fs+"px "+MONO;ctx.textAlign="left";ctx.fillStyle=MUT;
+  ctx.fillText("promoter on",x0,top-3);ctx.textAlign="right";ctx.fillText("last 30 s",x1,top-3);
   const n=TR.length,dx=(x1-x0)/TRN,off=x1-n*dx;
-  ctx.fillStyle="#1C222B";ctx.fillRect(x0,top+2,x1-x0,bh);
-  ctx.fillStyle=SCAR;for(let i=0;i<n;i++)if(TR[i].on)ctx.fillRect(off+i*dx,top+2,dx+.5,bh);
+  ctx.fillStyle="#1C222B";rrect(x0,top+2,x1-x0,bh,bh/2);ctx.fill();
+  ctx.save();rrect(x0,top+2,x1-x0,bh,bh/2);ctx.clip();ctx.fillStyle=SCAR;for(let i=0;i<n;i++)if(TR[i].on)ctx.fillRect(off+i*dx,top+2,dx+.6,bh);ctx.restore();
   let mx=8;for(const r of TR)mx=Math.max(mx,r.n,r.h*S.lab.hl);
   ctx.textAlign="left";ctx.fillStyle=MUT;ctx.fillText("mRNA in this cell",x0,ly+6);
-  const cur=n?TR[n-1].n:0;ctx.textAlign="right";ctx.fillStyle=INK;ctx.fillText(String(cur),x1,ly+6);
-  const gy0=ly+12,gy1=ly+Math.max(20,lh);
-  ctx.strokeStyle=RULE;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,gy1+.5);ctx.lineTo(x1,gy1+.5);ctx.stroke();
-  if(n>1&&S.lab.hl>.02){ctx.save();ctx.globalAlpha=S.lab.hl;ctx.strokeStyle="#7A8290";ctx.lineWidth=1.5;ctx.setLineDash([4,3]);ctx.beginPath();for(let i=0;i<n;i++){const x=off+i*dx,y=gy1-(TR[i].h/mx)*(gy1-gy0);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();ctx.setLineDash([]);
-    ctx.font="10.5px "+MONO;ctx.textAlign="right";ctx.fillStyle=MUT;ctx.fillText("- - healthy cell",x1-34,ly+6);ctx.restore();}
-  if(n>1){ctx.strokeStyle=SCAR;ctx.lineWidth=1.7;ctx.lineJoin="round";ctx.beginPath();for(let i=0;i<n;i++){const x=off+i*dx,y=gy1-(TR[i].n/mx)*(gy1-gy0);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();}
+  const cur=n?TR[n-1].n:0;ctx.textAlign="right";ctx.fillStyle=INK;ctx.font="500 "+(fs+2)+"px "+MONO;ctx.fillText(String(cur),x1,ly+6);ctx.font=fs+"px "+MONO;
+  const gy0=ly+14,gy1=ly+Math.max(22,lh),Y=v=>gy1-(v/mx)*(gy1-gy0);
+  ctx.strokeStyle="rgba(255,255,255,.06)";ctx.lineWidth=1;for(let j=1;j<=2;j++){const y=Math.round(gy1-(gy1-gy0)*j/2)+.5;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();}
+  ctx.strokeStyle=RULE;ctx.beginPath();ctx.moveTo(x0,gy1+.5);ctx.lineTo(x1,gy1+.5);ctx.stroke();
+  if(n>1&&S.lab.hl>.02){ctx.save();ctx.globalAlpha=S.lab.hl;ctx.strokeStyle="#8A93A2";ctx.lineWidth=1.5;ctx.setLineDash([5,4]);ctx.beginPath();for(let i=0;i<n;i++){const x=off+i*dx,y=Y(TR[i].h);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+    const tx=x1-44;ctx.beginPath();ctx.moveTo(tx-ctx.measureText("healthy cell").width-26,ly+2);ctx.lineTo(tx-ctx.measureText("healthy cell").width-8,ly+2);ctx.stroke();ctx.setLineDash([]);
+    ctx.textAlign="right";ctx.fillStyle=MUT;ctx.fillText("healthy cell",tx,ly+6);ctx.restore();}
+  if(n>1){
+    const fill=ctx.createLinearGradient(0,gy0,0,gy1);fill.addColorStop(0,"rgba(240,86,111,.30)");fill.addColorStop(1,"rgba(240,86,111,0)");
+    ctx.beginPath();ctx.moveTo(off,gy1);for(let i=0;i<n;i++)ctx.lineTo(off+i*dx,Y(TR[i].n));ctx.lineTo(off+(n-1)*dx,gy1);ctx.closePath();ctx.fillStyle=fill;ctx.fill();
+    ctx.strokeStyle=SCAR;ctx.lineWidth=2;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();for(let i=0;i<n;i++){const x=off+i*dx,y=Y(TR[i].n);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+    const lx=off+(n-1)*dx,lyy=Y(TR[n-1].n);ctx.fillStyle="rgba(240,86,111,.25)";ctx.beginPath();ctx.arc(lx,lyy,6.5,0,7);ctx.fill();ctx.fillStyle="#FFD3DA";ctx.beginPath();ctx.arc(lx,lyy,2.6,0,7);ctx.fill();}
 }
 
 /* ---- step control ---- */
@@ -420,7 +469,7 @@ function setStep(i){
   const prev=step;step=i;
   steps.forEach((s,j)=>s.classList.toggle("on",j===i));
   dots.forEach((d,j)=>{if(j===i)d.setAttribute("aria-current","step");else d.removeAttribute("aria-current");});
-  nEl.textContent=String(i+1).padStart(2,"0")+" / "+String(TOT).padStart(2,"0");tEl.textContent=names[i];
+  nEl.textContent=String(i+1).padStart(2,"0")+" / "+String(TOT).padStart(2,"0");tEl.textContent=names[i];if(pEl)pEl.style.transform="scaleX("+((i+1)/TOT).toFixed(4)+")";
   live.textContent=`Step ${i+1} of ${TOT}: ${names[i]}`;
   if(i===1&&prev!==1){hero.tries=0;if(hero.mode!=="free")setHero("free",.4);else hero.timer=.4;}
   if(i<1&&hero.mode!=="free")setHero("free",.5);
